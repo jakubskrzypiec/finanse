@@ -23,7 +23,7 @@ Następnie wejdź na `http://localhost:8080`.
 - `index.html` — landing P&T Money
 - `styles.css` — layout, responsive, animacje
 - `script.js` — reveal, FAQ, hero parallax, mobile menu
-- `assets/ptmoney-logo.png` — logo
-- `tools/refinansowanie/` — działający kalkulator refinansowania
+- `ptmoney-logo.png` — logo
+- `refinansowanie.html` — działający kalkulator refinansowania
 
 > Formularz kontaktowy na landing page jest demonstracyjny i nie wysyła danych.
