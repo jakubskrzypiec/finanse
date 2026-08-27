@@ -49,3 +49,28 @@ footer{background:#0a211a;color:var(--cream);padding:58px 0 28px}.footer-grid{di
 
 .hero-copy-v2 h1{font-size:clamp(42px,3.8vw,58px);max-width:680px}.hero-copy-v2 .title-line{white-space:nowrap}
 @media(max-width:1100px){.hero-copy-v2 .title-line{white-space:normal}}
+
+
+/* ===== Mercury-inspired first-load reveal ===== */
+body.intro-lock{overflow:hidden}
+.page-intro{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;background:var(--green);overflow:hidden;transform:translate3d(0,0,0);will-change:transform;border-radius:0 0 0 0;box-shadow:0 30px 90px rgba(8,28,22,.2)}
+.page-intro::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(234,231,217,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(234,231,217,.035) 1px,transparent 1px);background-size:82px 82px;opacity:.45;mask-image:radial-gradient(circle at 50% 50%,#000 15%,transparent 74%)}
+.intro-ambient{position:absolute;border-radius:50%;filter:blur(2px);opacity:0;transform:scale(.7);animation:introAmbient 1.05s cubic-bezier(.16,1,.3,1) .08s forwards}
+.intro-ambient-a{width:min(74vw,900px);aspect-ratio:1;left:-18%;top:-42%;background:radial-gradient(circle,rgba(228,199,103,.14),rgba(228,199,103,0) 68%)}
+.intro-ambient-b{width:min(62vw,760px);aspect-ratio:1;right:-16%;bottom:-40%;background:radial-gradient(circle,rgba(43,117,97,.34),rgba(43,117,97,0) 68%);animation-delay:.18s}
+.intro-center{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:22px;transform:translateY(8px)}
+.intro-logo{width:clamp(132px,12vw,188px);filter:brightness(0) invert(1);opacity:0;transform:translateY(10px) scale(.965);animation:introLogo .72s cubic-bezier(.16,1,.3,1) .12s forwards}
+.intro-rule{display:block;width:min(200px,22vw);height:1px;overflow:hidden;background:rgba(234,231,217,.12);position:relative}
+.intro-rule::after{content:"";position:absolute;inset:0;background:var(--brass-light);transform:scaleX(0);transform-origin:left;animation:introRule .7s cubic-bezier(.16,1,.3,1) .35s forwards}
+.intro-edge{position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent 10%,var(--brass-light) 50%,transparent 90%);opacity:0;animation:introEdge .45s ease .72s forwards}
+body.intro-lock .site-header,body.intro-lock main,body.intro-lock footer{transform:translateY(24px) scale(.985);opacity:.72;filter:saturate(.92);transform-origin:50% 20%;will-change:transform,opacity,filter}
+body.intro-revealing .site-header,body.intro-revealing main,body.intro-revealing footer{transform:translateY(0) scale(1);opacity:1;filter:saturate(1);transition:transform 1.08s cubic-bezier(.16,1,.3,1),opacity .78s ease,filter .9s ease}
+body.intro-revealing .page-intro{transform:translateY(-102%);border-radius:0 0 28px 28px;transition:transform .92s cubic-bezier(.76,0,.24,1),border-radius .5s ease .15s}
+body.intro-revealing .intro-center{opacity:0;transform:translateY(-14px);transition:opacity .28s ease,transform .38s cubic-bezier(.16,1,.3,1)}
+body.intro-done .page-intro{display:none}
+@keyframes introLogo{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes introRule{to{transform:scaleX(1)}}
+@keyframes introEdge{to{opacity:.9}}
+@keyframes introAmbient{to{opacity:1;transform:scale(1)}}
+@media(max-width:650px){.intro-logo{width:132px}.intro-rule{width:128px}.page-intro::before{background-size:58px 58px}.page-intro{box-shadow:none}body.intro-revealing .page-intro{border-radius:0 0 18px 18px}}
+@media(prefers-reduced-motion:reduce){body.intro-lock{overflow:auto}.page-intro{display:none!important}body.intro-lock .site-header,body.intro-lock main,body.intro-lock footer{transform:none;opacity:1;filter:none}}

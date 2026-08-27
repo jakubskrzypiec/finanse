@@ -2,6 +2,26 @@
   const $ = (s,c=document)=>c.querySelector(s);
   const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
   const fmt = new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN',maximumFractionDigits:0});
+  // First-load page reveal: a short branded stage, then the site rises into view.
+  const intro = document.getElementById('pageIntro');
+  if(intro && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    let introFinished=false;
+    const finishIntro=()=>{
+      if(introFinished) return;
+      introFinished=true;
+      document.body.classList.add('intro-revealing');
+      setTimeout(()=>{
+        document.body.classList.remove('intro-lock','intro-revealing');
+        document.body.classList.add('intro-done');
+      },980);
+    };
+    const introTimer=setTimeout(finishIntro,980);
+    intro.addEventListener('pointerdown',()=>{clearTimeout(introTimer);finishIntro();},{once:true});
+  } else {
+    document.body.classList.remove('intro-lock');
+    document.body.classList.add('intro-done');
+  }
+
   const num = n => new Intl.NumberFormat('pl-PL',{maximumFractionDigits:0}).format(Math.round(n||0));
   const money = n => fmt.format(Math.round(n||0));
 
