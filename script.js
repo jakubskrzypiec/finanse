@@ -24,24 +24,13 @@
     return {payment,total,interest:total-principal};
   }
 
-  const heroAmount=$('#heroAmount'), heroPeriod=$('#heroPeriod');
-  function heroCalc(){
-    if(!heroAmount||!heroPeriod)return;
-    const a=+heroAmount.value,p=+heroPeriod.value;
-    const r=annuity(a,9.9,p);
-    $('#heroAmountVal').textContent=num(a)+' zł';
-    $('#heroPeriodVal').textContent=p+' mies.';
-    $('#heroResult').textContent=num(r.payment)+' zł / mies.';
-  }
-  heroAmount?.addEventListener('input',heroCalc); heroPeriod?.addEventListener('input',heroCalc); heroCalc();
-
   const stage=$('.hero-stage'), card=$('.tilt-card');
   if(stage&&card&&matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
     stage.addEventListener('pointermove',e=>{
       const r=stage.getBoundingClientRect(), nx=(e.clientX-r.left-r.width/2)/r.width, ny=(e.clientY-r.top-r.height/2)/r.height;
-      card.style.transform=`rotateY(${(-3+nx*7).toFixed(2)}deg) rotateX(${(1.5-ny*6).toFixed(2)}deg) translate3d(${(nx*5).toFixed(1)}px,${(ny*5).toFixed(1)}px,0)`;
+      card.style.transform=`rotateY(${(-5+nx*7).toFixed(2)}deg) rotateX(${(2-ny*6).toFixed(2)}deg) translate3d(${(nx*6).toFixed(1)}px,${(ny*6).toFixed(1)}px,0)`;
     });
-    stage.addEventListener('pointerleave',()=>card.style.transform='rotateY(-3deg) rotateX(1.5deg)');
+    stage.addEventListener('pointerleave',()=>card.style.transform='rotateY(-5deg) rotateX(2deg)');
   }
 
   let cashRate=9.9;
@@ -68,6 +57,38 @@
     $('#refNewPayment').textContent=money(newR.payment);
   }
   ['#refAmount','#refCurrent','#refNew','#refYears','#refCosts'].forEach(id=>$(id)?.addEventListener('input',refiCalc)); refiCalc();
+
+
+
+  // Premium, restrained motion: scroll progress, magnetic CTAs and changing comparison state.
+  const progressBar=$('.scroll-progress span');
+  const updateProgress=()=>{
+    if(!progressBar) return;
+    const max=document.documentElement.scrollHeight-innerHeight;
+    progressBar.style.transform=`scaleX(${max>0?Math.min(1,scrollY/max):0})`;
+  };
+  updateProgress(); addEventListener('scroll',updateProgress,{passive:true}); addEventListener('resize',updateProgress);
+
+  if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    $$('.magnetic').forEach(btn=>{
+      btn.addEventListener('pointermove',e=>{
+        const r=btn.getBoundingClientRect();
+        const x=(e.clientX-r.left-r.width/2)*.08, y=(e.clientY-r.top-r.height/2)*.12;
+        btn.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
+      });
+      btn.addEventListener('pointerleave',()=>btn.style.transform='');
+    });
+  }
+
+  const offerRows=$$('.offer-row');
+  if(offerRows.length&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    let offerIndex=0;
+    setInterval(()=>{
+      offerRows.forEach(r=>r.classList.remove('active'));
+      offerIndex=(offerIndex+1)%offerRows.length;
+      offerRows[offerIndex].classList.add('active');
+    },2200);
+  }
 
   $$('.faq-item button').forEach(btn=>btn.addEventListener('click',()=>{const item=btn.closest('.faq-item');$$('.faq-item').forEach(x=>{if(x!==item)x.classList.remove('open')});item.classList.toggle('open')}));
   $('#leadForm')?.addEventListener('submit',e=>{e.preventDefault();if(!e.currentTarget.checkValidity()){e.currentTarget.reportValidity();return}e.currentTarget.classList.add('sent');$('.form-submit',e.currentTarget).textContent='Zgłoszenie wysłane';});
