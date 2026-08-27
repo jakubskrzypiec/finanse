@@ -86,4 +86,89 @@
     if(!e.currentTarget.checkValidity()){e.currentTarget.reportValidity();return}
     e.currentTarget.classList.add('sent');
   });
+
+
+  // Cinematic office -> laptop -> website transition
+  const cinematic = $('#cinematicEntry');
+  const world = $('#officeWorld');
+  const laptop = $('#laptopWrap');
+  const bezel = $('#laptopBezel');
+  const screenBrand = $('#screenBrand');
+  const screenPreview = $('#screenPreview');
+  const screenEnter = $('#screenEnterLabel');
+  const caption = $('#officeCaption');
+  const indicator = $('#scrollIndicator');
+  const curtain = $('#cinematicCurtain');
+
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const easeInOut = t => t < .5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2;
+  const easeOut = t => 1 - Math.pow(1-t,3);
+
+  function updateCinematic(){
+    if(!cinematic || !world || !laptop) return;
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const r = cinematic.getBoundingClientRect();
+    const scrollable = cinematic.offsetHeight - innerHeight;
+    const p = clamp01((-r.top) / Math.max(1, scrollable));
+
+    // Phase 1: establish office and approach desk
+    const approach = easeInOut(clamp01(p / .54));
+    const worldScale = 1 + approach * 1.42;
+    const worldY = approach * 7;
+    const worldX = approach * -1.2;
+    world.style.transform = `scale(${worldScale}) translate(${worldX}%, ${worldY}%)`;
+
+    // Office UI fades as camera gets close
+    const uiFade = 1 - easeOut(clamp01((p - .24) / .24));
+    if(caption) caption.style.opacity = uiFade;
+    if(indicator) indicator.style.opacity = uiFade;
+
+    // Phase 2: laptop becomes camera target
+    const focus = easeInOut(clamp01((p - .30) / .46));
+    const laptopScale = 1 + focus * 2.55;
+    const laptopY = focus * 3.2;
+    laptop.style.transform = `translate(-50%,-50%) perspective(1200px) rotateX(${-2 + focus*2}deg) scale(${laptopScale}) translateY(${laptopY}%)`;
+
+    // Logo -> live page preview on the laptop
+    const previewP = easeOut(clamp01((p - .36) / .22));
+    if(screenBrand){
+      screenBrand.style.opacity = String(1 - previewP);
+      screenBrand.style.transform = `scale(${1 - previewP*.07})`;
+    }
+    if(screenPreview){
+      screenPreview.style.opacity = String(previewP);
+      screenPreview.style.transform = `scale(${.93 + previewP*.07})`;
+    }
+    if(screenEnter) screenEnter.style.opacity = String(1 - clamp01((p - .20)/.18));
+
+    // Phase 3: laptop bezel disappears and screen becomes the page
+    const enter = easeInOut(clamp01((p - .68) / .30));
+    if(bezel){
+      bezel.style.background = `rgba(17,24,21,${1-enter})`;
+      bezel.style.padding = `${9*(1-enter)}px`;
+      bezel.style.borderRadius = `${11*(1-enter)}px`;
+    }
+    const lid = laptop.querySelector('.laptop-lid');
+    const base = laptop.querySelector('.laptop-base');
+    if(lid){
+      lid.style.background = `rgba(150,152,148,${1-enter})`;
+      lid.style.boxShadow = `0 30px 55px rgba(0,0,0,${.33*(1-enter)})`;
+      lid.style.padding = `${9*(1-enter)}px`;
+    }
+    if(base) base.style.opacity = String(1-enter);
+
+    // Fade into the exact cream of the real hero
+    if(curtain) curtain.style.opacity = String(easeOut(clamp01((p - .86) / .14)));
+
+    // small cinematic depth
+    world.style.filter = `saturate(${1 - enter*.12}) brightness(${1 + enter*.04})`;
+  }
+
+  if(cinematic){
+    addEventListener('scroll', updateCinematic, {passive:true});
+    addEventListener('resize', updateCinematic);
+    updateCinematic();
+  }
+
 })();
