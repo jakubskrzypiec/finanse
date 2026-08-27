@@ -1,12 +1,13 @@
 (() => {
   const $ = (s, ctx=document) => ctx.querySelector(s);
   const $$ = (s, ctx=document) => [...ctx.querySelectorAll(s)];
-  const header = $('.nav-shell');
+
+  const header = $('.site-header');
   const menuBtn = $('.menu-btn');
   const mobile = $('.mobile-menu');
-
-  const onScroll = () => header.classList.toggle('scrolled', scrollY > 18);
-  onScroll(); addEventListener('scroll', onScroll, {passive:true});
+  const setHeader = () => header?.classList.toggle('scrolled', scrollY > 18);
+  setHeader();
+  addEventListener('scroll', setHeader, {passive:true});
 
   menuBtn?.addEventListener('click', () => {
     const open = mobile.classList.toggle('open');
@@ -14,44 +15,88 @@
     mobile.setAttribute('aria-hidden', String(!open));
   });
   $$('.mobile-menu a').forEach(a => a.addEventListener('click', () => {
-    mobile.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); mobile.setAttribute('aria-hidden','true');
+    mobile.classList.remove('open');
+    menuBtn?.setAttribute('aria-expanded','false');
+    mobile.setAttribute('aria-hidden','true');
   }));
 
-  const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
-  }), {threshold:.13});
-  $$('.reveal').forEach(el => io.observe(el));
+  const revealIO = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealIO.unobserve(entry.target);
+    }
+  }), {threshold:.12});
+  $$('.reveal').forEach(el => revealIO.observe(el));
 
-  const counters = $$('[data-count]');
-  const counterIO = new IntersectionObserver(entries => entries.forEach(e => {
-    if(!e.isIntersecting) return;
-    const el=e.target, end=+el.dataset.count, suffix=el.dataset.suffix||''; let start=0; const t0=performance.now();
-    const tick=t=>{ const p=Math.min(1,(t-t0)/900); el.textContent=Math.round(end*(1-Math.pow(1-p,3)))+suffix; if(p<1)requestAnimationFrame(tick); };
-    requestAnimationFrame(tick); counterIO.unobserve(el);
-  }),{threshold:.5});
-  counters.forEach(el=>counterIO.observe(el));
-
-  $$('.faq-item button').forEach(btn => btn.addEventListener('click',()=>{
-    const item=btn.closest('.faq-item');
-    $$('.faq-item').forEach(x=>{if(x!==item)x.classList.remove('open')});
+  $$('.faq-item button').forEach(btn => btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    $$('.faq-item').forEach(x => { if (x !== item) x.classList.remove('open'); });
     item.classList.toggle('open');
   }));
 
-  const hero=$('.hero'), glow=$('.cursor-glow'), stage=$('.hero-stage'), card=$('.tilt-card');
-  const fine = matchMedia('(pointer:fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(fine && hero){
-    hero.addEventListener('pointermove', e => {
-      const r=hero.getBoundingClientRect(); const x=e.clientX-r.left, y=e.clientY-r.top;
-      glow.style.left=x+'px'; glow.style.top=y+'px';
-      const sr=stage.getBoundingClientRect(); const nx=(e.clientX-(sr.left+sr.width/2))/sr.width; const ny=(e.clientY-(sr.top+sr.height/2))/sr.height;
-      card.style.transform=`rotateY(${(-4 + nx*8).toFixed(2)}deg) rotateX(${(2 - ny*7).toFixed(2)}deg) translate3d(${(nx*5).toFixed(1)}px,${(ny*5).toFixed(1)}px,0)`;
+  const stage = $('.hero-stage');
+  const card = $('.tilt-card');
+  const fine = matchMedia('(pointer:fine)').matches && !matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (fine && stage && card) {
+    stage.addEventListener('pointermove', e => {
+      const r = stage.getBoundingClientRect();
+      const nx = (e.clientX - (r.left + r.width/2)) / r.width;
+      const ny = (e.clientY - (r.top + r.height/2)) / r.height;
+      card.style.transform = `rotateY(${(-3 + nx*7).toFixed(2)}deg) rotateX(${(1.5 - ny*6).toFixed(2)}deg) translate3d(${(nx*5).toFixed(1)}px,${(ny*5).toFixed(1)}px,0)`;
     });
-    hero.addEventListener('pointerleave',()=>{card.style.transform='rotateY(-4deg) rotateX(2deg)'});
+    stage.addEventListener('pointerleave', () => card.style.transform = 'rotateY(-3deg) rotateX(1.5deg)');
   }
 
-  $$('.magnetic').forEach(el=>{
-    if(!fine)return;
-    el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.08}px,${(e.clientY-r.top-r.height/2)*.08}px)`});
-    el.addEventListener('mouseleave',()=>el.style.transform='');
+  const fmt0 = new Intl.NumberFormat('pl-PL', {style:'currency',currency:'PLN',maximumFractionDigits:0});
+  const money = v => fmt0.format(Math.round(Number.isFinite(v) ? v : 0));
+  const val = id => parseFloat(String($(id)?.value || 0).replace(',','.')) || 0;
+
+  function annuity(principal, annualRate, months) {
+    if (!(principal > 0) || !(months > 0)) return {payment:0, interest:0, total:0};
+    const i = annualRate / 100 / 12;
+    const payment = i === 0 ? principal / months : principal * i / (1 - Math.pow(1 + i, -months));
+    const total = payment * months;
+    return {payment, interest: total - principal, total};
+  }
+
+  const pairs = [
+    ['#hcAmount','#hcAmountRange'],
+    ['#hcCurrentRate','#hcCurrentRateRange'],
+    ['#hcNewRate','#hcNewRateRange'],
+    ['#hcYears','#hcYearsRange'],
+    ['#hcCosts','#hcCostsRange']
+  ];
+
+  function calculateHome() {
+    const amount = val('#hcAmount');
+    const currentRate = val('#hcCurrentRate');
+    const newRate = val('#hcNewRate');
+    const years = Math.max(1, val('#hcYears'));
+    const costs = Math.max(0, val('#hcCosts'));
+    const months = Math.round(years * 12);
+    const current = annuity(amount, currentRate, months);
+    const next = annuity(amount, newRate, months);
+    const monthly = current.payment - next.payment;
+    const interestSave = current.interest - next.interest;
+    const netSave = (current.total - next.total) - costs;
+
+    $('#hcCurrentPayment').textContent = money(current.payment);
+    $('#hcNewPayment').textContent = money(next.payment);
+    $('#hcPaymentDiff').textContent = (monthly >= 0 ? '−' : '+') + money(Math.abs(monthly));
+    $('#hcInterestSavings').textContent = (interestSave >= 0 ? '+' : '−') + money(Math.abs(interestSave));
+    $('#hcNetSavings').textContent = (netSave >= 0 ? '+' : '−') + money(Math.abs(netSave));
+    $('#hcNetSavings').style.color = netSave >= 0 ? '#dcc179' : '#e3a08e';
+    $('#hcNetNote').textContent = netSave >= 0 ? 'po uwzględnieniu kosztów zmiany' : 'ten wariant nie daje oszczędności netto';
+    const max = Math.max(current.interest, next.interest, 1);
+    const percent = Math.max(5, Math.min(100, 100 - (next.interest / max * 100)));
+    $('#hcBar').style.width = percent + '%';
+  }
+
+  pairs.forEach(([inputSel, rangeSel]) => {
+    const input = $(inputSel), range = $(rangeSel);
+    if (!input || !range) return;
+    input.addEventListener('input', () => { range.value = input.value; calculateHome(); });
+    range.addEventListener('input', () => { input.value = range.value; calculateHome(); });
   });
+  calculateHome();
 })();
