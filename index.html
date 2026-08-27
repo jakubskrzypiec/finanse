@@ -8,8 +8,8 @@
   <meta name="description" content="P&T Money — kredyty, leasing, faktoring i ubezpieczenia. Porównujemy rozwiązania finansowe i pomagamy wybrać odpowiednią ofertę.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ptmoney-v12.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ptmoney-meeting.css">
 </head>
 <body class="cinema-mode">
 <div class="scroll-progress" aria-hidden="true"><span></span></div>
@@ -21,16 +21,16 @@
       </a>
 
       <nav class="nav-links" aria-label="Nawigacja główna">
+        <a href="#wybor">Znajdź rozwiązanie</a>
         <a href="#oferta">Oferta</a>
-        <a href="#onas">O nas</a>
-        <a href="#proces">Proces</a>
+        <a href="#kalkulator">Kalkulatory</a>
+        <a href="#proces">Jak działamy</a>
         <a href="#zespol">Zespół</a>
-        <a href="#wiedza">Wiedza</a>
         <a href="#kontakt">Kontakt</a>
       </nav>
 
       <div class="nav-actions">
-        <a class="btn btn-outline btn-nav" href="#kontakt">Zaloguj się</a>
+        <a class="btn btn-outline btn-nav" href="#kalkulator">Sprawdź ratę</a>
         <a class="btn btn-green btn-nav magnetic" href="#kontakt">Umów rozmowę <span>→</span></a>
       </div>
 
@@ -40,11 +40,11 @@
     </div>
 
     <div class="mobile-nav" aria-hidden="true">
+      <a href="#wybor">Znajdź rozwiązanie</a>
       <a href="#oferta">Oferta</a>
-      <a href="#onas">O nas</a>
-      <a href="#proces">Proces</a>
+      <a href="#kalkulator">Kalkulatory</a>
+      <a href="#proces">Jak działamy</a>
       <a href="#zespol">Zespół</a>
-      <a href="#wiedza">Wiedza</a>
       <a href="#kontakt">Kontakt</a>
     </div>
   </header>
@@ -132,14 +132,15 @@
     <section class="hero hero-after-cinematic">
       <div class="hero-shell shell-wide">
         <div class="hero-copy">
+          <span class="hero-kicker hero-reveal">Doradztwo finansowe · jedna rozmowa, wiele możliwości</span>
           <h1>
             <span class="hero-line"><span>Finanse bez zbędnych</span></span>
             <span class="hero-line"><span>komplikacji.</span></span>
           </h1>
 
           <p class="hero-lead hero-reveal delay-1">
-            Porównujemy dostępne możliwości, jasno pokazujemy różnice
-            i prowadzimy Cię od pierwszej rozmowy do decyzji.
+            Porównujemy rozwiązania dostępne na rynku, pokazujemy różnice prostym językiem
+            i prowadzimy Cię przez formalności od pierwszej rozmowy do decyzji.
           </p>
 
           <div class="hero-actions hero-reveal delay-2">
@@ -255,56 +256,123 @@
       </div>
     </section>
 
-    <section class="solutions section" id="oferta">
+    <section class="decision section" id="wybor">
       <div class="shell">
-        <div class="section-kicker reveal">Oferta</div>
-
-        <div class="solutions-heading reveal">
-          <h2>Jeden doradca.<br>Siedem rozwiązań finansowych.</h2>
-          <p>Wybierz, czego dziś potrzebujesz — resztę wyjaśnimy podczas rozmowy i dobierzemy oferty dopasowane do Twojej sytuacji.</p>
+        <div class="decision-head reveal">
+          <span class="section-kicker">Zacznij od swojej sytuacji</span>
+          <h2>Nie musisz wiedzieć,<br>jakiego produktu potrzebujesz.</h2>
+          <p>Wybierz cel. Pokażemy Ci, od czego warto zacząć i jakie rozwiązania najczęściej sprawdzamy w podobnej sytuacji.</p>
         </div>
 
-        <div class="solutions-board">
-          <a class="solution solution-large reveal" href="#kontakt">
-            <div class="solution-top"><span>Finanse osobiste</span><span>↗</span></div>
-            <div>
-              <h3>Kredyt gotówkowy</h3>
-              <p>Gotówka na dowolny cel bez zbędnych formalności. Decyzja nawet w 24 godziny, porównanie ofert wielu banków naraz.</p>
+        <div class="decision-workspace reveal" id="decisionWorkspace">
+          <div class="decision-menu" role="tablist" aria-label="Wybierz swoją sytuację">
+            <button class="decision-tab active" type="button" data-choice="home" role="tab" aria-selected="true">
+              <span>01</span><b>Kupuję lub buduję nieruchomość</b><i>→</i>
+            </button>
+            <button class="decision-tab" type="button" data-choice="lower" role="tab" aria-selected="false">
+              <span>02</span><b>Chcę obniżyć lub uporządkować raty</b><i>→</i>
+            </button>
+            <button class="decision-tab" type="button" data-choice="cash" role="tab" aria-selected="false">
+              <span>03</span><b>Potrzebuję środków na dowolny cel</b><i>→</i>
+            </button>
+            <button class="decision-tab" type="button" data-choice="business" role="tab" aria-selected="false">
+              <span>04</span><b>Finansuję rozwój firmy</b><i>→</i>
+            </button>
+          </div>
+
+          <div class="decision-result" aria-live="polite">
+            <div class="decision-result-top">
+              <span id="decisionLabel">Nieruchomość</span>
+              <small>Rekomendowany kierunek rozmowy</small>
             </div>
-          </a>
+            <h3 id="decisionTitle">Kredyt hipoteczny + analiza zdolności</h3>
+            <p id="decisionText">Najpierw sprawdzamy budżet i zdolność, później porównujemy warianty finansowania i koszty, które naprawdę wpływają na całe zobowiązanie.</p>
 
-          <a class="solution solution-large reveal" href="#kontakt">
-            <div class="solution-top"><span>Porządek w zobowiązaniach</span><span>↗</span></div>
-            <div>
-              <h3>Kredyt konsolidacyjny</h3>
-              <p>Połącz wszystkie raty w jedną, niższą. Jeden termin płatności w miesiącu i więcej oddechu w domowym budżecie.</p>
+            <div class="decision-points" id="decisionPoints">
+              <span>zdolność i bezpieczny budżet</span>
+              <span>porównanie wariantów</span>
+              <span>wsparcie przy dokumentach</span>
             </div>
-          </a>
 
-          <a class="solution reveal" href="#hipoteka">
-            <div class="solution-top"><span>Nieruchomości</span><span>↗</span></div>
-            <div><h3>Kredyt hipoteczny</h3><p>Finansowanie zakupu, budowy lub remontu nieruchomości. Porównujemy oferty banków i negocjujemy marże i prowizje.</p></div>
-          </a>
+            <div class="decision-bottom">
+              <div>
+                <small>Co dalej?</small>
+                <b id="decisionNext">Krótka rozmowa → analiza → porównanie</b>
+              </div>
+              <a class="btn btn-green magnetic" href="#kontakt">Porozmawiaj z doradcą <span>→</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <a class="solution reveal" href="#kontakt">
-            <div class="solution-top"><span>Dla firm</span><span>↗</span></div>
-            <div><h3>Kredyt firmowy</h3><p>Kapitał obrotowy lub inwestycyjny dla Twojej firmy — dopasowany niezależnie od formy działalności i stażu.</p></div>
-          </a>
+    <section class="comparison-story">
+      <div class="shell comparison-story-grid">
+        <div class="comparison-story-copy reveal">
+          <span class="section-kicker light">Przejrzystość zamiast chaosu</span>
+          <h2>Jedna rozmowa.<br>Różnice w jednym widoku.</h2>
+          <p>Zamiast zostawiać klienta z nazwami produktów i tabelami bankowymi, porządkujemy najważniejsze parametry i pokazujemy je w czytelny sposób.</p>
+          <div class="comparison-story-note">
+            <span></span>
+            <p>Przykładowy sposób prezentacji ofert — dane demonstracyjne.</p>
+          </div>
+        </div>
 
-          <a class="solution reveal" href="#kontakt">
-            <div class="solution-top"><span>Środki trwałe</span><span>↗</span></div>
-            <div><h3>Leasing</h3><p>Sfinansuj maszyny, flotę lub sprzęt bez zamrażania własnych środków. Korzyści podatkowe i elastyczne raty.</p></div>
-          </a>
+        <div class="compare-console reveal" id="compareConsole">
+          <div class="compare-top">
+            <div><span>Porównanie wariantów</span><small>Widok demonstracyjny</small></div>
+            <div class="compare-toggle" role="group" aria-label="Wyróżnij parametr">
+              <button class="active" type="button" data-metric="monthly">Rata</button>
+              <button type="button" data-metric="cost">Koszt</button>
+              <button type="button" data-metric="flex">Elastyczność</button>
+            </div>
+          </div>
 
-          <a class="solution reveal" href="#kontakt">
-            <div class="solution-top"><span>Płynność</span><span>↗</span></div>
-            <div><h3>Faktoring</h3><p>Zamień faktury z odroczonym terminem płatności w gotówkę tego samego dnia. Popraw płynność swojej firmy.</p></div>
-          </a>
+          <div class="compare-table">
+            <div class="compare-row compare-head-row">
+              <span>Parametr</span><b>Wariant A</b><b>Wariant B</b><b>Wariant C</b>
+            </div>
+            <div class="compare-row metric-monthly active-metric">
+              <span>Rata miesięczna</span><b>niższa</b><b>średnia</b><b>wyższa</b>
+            </div>
+            <div class="compare-row metric-cost">
+              <span>Łączny koszt</span><b>średni</b><b>niższy</b><b>wyższy</b>
+            </div>
+            <div class="compare-row metric-flex">
+              <span>Elastyczność</span><b>standardowa</b><b>wysoka</b><b>standardowa</b>
+            </div>
+            <div class="compare-row">
+              <span>Dopasowanie do celu</span><b class="score"><i style="--score:82%"></i></b><b class="score"><i style="--score:94%"></i></b><b class="score"><i style="--score:68%"></i></b>
+            </div>
+          </div>
 
-          <a class="solution reveal" href="#kontakt">
-            <div class="solution-top"><span>Ochrona</span><span>↗</span></div>
-            <div><h3>Ubezpieczenia</h3><p>Zabezpiecz kredyt, firmę i rodzinę. Dobierzemy ochronę adekwatną do ryzyka — bez przepłacania za zbędne opcje.</p></div>
-          </a>
+          <div class="compare-recommend">
+            <span>Najlepsze dopasowanie</span>
+            <div><b>Wariant B</b><small>najlepszy balans kosztu i elastyczności w tym przykładzie</small></div>
+            <i>✓</i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="products-editorial section" id="oferta">
+      <div class="shell">
+        <div class="products-intro reveal">
+          <div>
+            <span class="section-kicker">Oferta</span>
+            <h2>Siedem produktów.<br>Jeden sposób obsługi.</h2>
+          </div>
+          <p>Niezależnie od rodzaju finansowania, klient nie musi sam porównywać dokumentów i warunków. Zaczynamy od celu, później dobieramy rozwiązanie.</p>
+        </div>
+
+        <div class="products-list">
+          <a class="product-line reveal" href="#kontakt"><span>01</span><b>Kredyt gotówkowy</b><p>Finansowanie na dowolny cel, dobierane do możliwości i planu spłaty.</p><i>↗</i></a>
+          <a class="product-line reveal" href="#kontakt"><span>02</span><b>Kredyt konsolidacyjny</b><p>Uporządkowanie kilku zobowiązań i analiza możliwości obniżenia miesięcznych obciążeń.</p><i>↗</i></a>
+          <a class="product-line reveal featured" href="#hipoteka"><span>03</span><b>Kredyt hipoteczny</b><p>Zakup, budowa lub refinansowanie nieruchomości z porównaniem najważniejszych kosztów.</p><i>↗</i></a>
+          <a class="product-line reveal" href="#kontakt"><span>04</span><b>Kredyt firmowy</b><p>Kapitał na bieżącą działalność lub inwestycje — dopasowany do sytuacji firmy.</p><i>↗</i></a>
+          <a class="product-line reveal" href="#kontakt"><span>05</span><b>Leasing</b><p>Finansowanie pojazdów, maszyn i sprzętu bez angażowania całego kapitału.</p><i>↗</i></a>
+          <a class="product-line reveal" href="#kontakt"><span>06</span><b>Faktoring</b><p>Wsparcie płynności poprzez wcześniejszy dostęp do środków z wystawionych faktur.</p><i>↗</i></a>
+          <a class="product-line reveal" href="#kontakt"><span>07</span><b>Ubezpieczenia</b><p>Ochrona dopasowana do finansowania, rodziny lub działalności.</p><i>↗</i></a>
         </div>
       </div>
     </section>
@@ -312,10 +380,10 @@
     <section class="rate-section" id="kalkulator">
       <div class="shell rate-grid">
         <div class="rate-copy reveal">
-          <span class="section-kicker light">Kalkulator</span>
-          <h2>Ile mogłaby wynosić Twoja rata?</h2>
-          <p>Przesuń suwaki i sprawdź orientacyjną wysokość raty kredytu gotówkowego. To punkt wyjścia do rozmowy z doradcą — nie oferta.</p>
-          <a class="text-link" href="#kontakt">Dostań realną ofertę <span>↗</span></a>
+          <span class="section-kicker light">Kalkulator raty</span>
+          <h2>Najpierw zobacz skalę.<br>Później sprawdź realne opcje.</h2>
+          <p>Prosta symulacja pomaga klientowi wejść w temat bez formularza i bez rozmowy. Po wyniku naturalnie przechodzimy do konkretnej analizy.</p>
+          <a class="text-link" href="#kontakt">Przejdź od symulacji do oferty <span>↗</span></a>
         </div>
 
         <div class="rate-tool reveal">
@@ -356,7 +424,7 @@
             </div>
           </div>
 
-          <p class="rate-disclaimer">Kalkulacja ma charakter poglądowy i nie uwzględnia prowizji, ubezpieczeń ani ostatecznej oceny zdolności kredytowej. Rzeczywista RRSO i warunki zależą od wybranej oferty banku.</p>
+          <p class="rate-disclaimer">Kalkulacja ma charakter poglądowy i nie uwzględnia prowizji, ubezpieczeń ani ostatecznej oceny zdolności kredytowej. Rzeczywista RRSO i warunki zależą od wybranej oferty instytucji.</p>
         </div>
       </div>
     </section>
@@ -364,17 +432,17 @@
     <section class="mortgage-section section" id="hipoteka">
       <div class="shell mortgage-new">
         <div class="mortgage-copy-new reveal">
-          <span class="section-kicker">Kredyt hipoteczny</span>
-          <h2>Twój dom,<br>nasza robota papierkowa.</h2>
-          <p>Zakup mieszkania, budowa domu czy refinansowanie — porównujemy oferty banków, negocjujemy marżę i prowizję oraz prowadzimy Cię przez cały proces, od symulacji po podpisanie umowy.</p>
+          <span class="section-kicker">Hipoteka i refinansowanie</span>
+          <h2>W dużym zobowiązaniu<br>liczą się szczegóły.</h2>
+          <p>Rata to tylko jeden parametr. W tej sekcji klient może zobaczyć sens refinansowania i zrozumieć, dlaczego warto porównać cały koszt, a nie tylko pojedynczą liczbę.</p>
 
           <div class="mortgage-points">
-            <span>Porównanie ofert wielu banków</span>
-            <span>Negocjacja marży i prowizji</span>
-            <span>Wsparcie przy dokumentach</span>
+            <span>Porównanie kosztu w całym okresie</span>
+            <span>Analiza obecnej i nowej raty</span>
+            <span>Punkt wyjścia do rozmowy z doradcą</span>
           </div>
 
-          <a class="btn btn-green magnetic" href="#kontakt">Zapytaj o hipotekę <span>→</span></a>
+          <a class="btn btn-green magnetic" href="#kontakt">Sprawdź swoją sytuację <span>→</span></a>
         </div>
 
         <div class="refi-panel reveal">
@@ -400,54 +468,61 @@
             </div>
           </div>
 
-          <p class="refi-disclaimer">Symulacja orientacyjna. Rzeczywiste warunki refinansowania zależą od oferty banku, kosztów przeniesienia i indywidualnej oceny zdolności kredytowej.</p>
+          <p class="refi-disclaimer">Symulacja orientacyjna. Rzeczywiste warunki refinansowania zależą od oferty instytucji, kosztów przeniesienia i indywidualnej oceny zdolności kredytowej.</p>
         </div>
       </div>
     </section>
 
-    <section class="process-new section" id="proces">
+    <section class="process-premium section" id="proces">
       <div class="shell">
-        <div class="process-new-head reveal">
-          <span class="section-kicker">Jak to działa</span>
-          <h2>Od pierwszej rozmowy<br>do decyzji.</h2>
+        <div class="process-premium-head reveal">
+          <span class="section-kicker">Jak działamy</span>
+          <h2>Klient zawsze wie,<br>co dzieje się dalej.</h2>
+          <p>Proces został zaprojektowany tak, żeby nie wymagał znajomości bankowych procedur ani produktów.</p>
         </div>
 
-        <div class="process-rows">
-          <article class="process-row reveal">
-            <div class="process-word">Rozmowa</div>
-            <p>Wypełniasz krótki formularz — imię, e-mail i telefon. Zajmuje to niecałe 2 minuty.</p>
-            <span>poznajemy sytuację</span>
-          </article>
-          <article class="process-row reveal">
-            <div class="process-word">Analiza</div>
-            <p>Poznajemy Twoją sytuację, analizujemy potrzeby i szukamy najlepszych ofert na rynku.</p>
-            <span>porównujemy rozwiązania</span>
-          </article>
-          <article class="process-row reveal">
-            <div class="process-word">Decyzja</div>
-            <p>Przedstawiamy porównanie ofert. Ty decydujesz, my pilnujemy formalności do końca.</p>
-            <span>prowadzimy do finalizacji</span>
-          </article>
+        <div class="process-track reveal">
+          <div class="process-track-line"><i></i></div>
+          <article><span>01</span><b>Rozmowa</b><p>Poznanie celu, sytuacji i najważniejszych ograniczeń.</p></article>
+          <article><span>02</span><b>Analiza</b><p>Sprawdzenie dostępnych kierunków i parametrów finansowania.</p></article>
+          <article><span>03</span><b>Porównanie</b><p>Jasne zestawienie różnic, kosztów i warunków.</p></article>
+          <article><span>04</span><b>Finalizacja</b><p>Wsparcie przy dokumentach i prowadzenie do decyzji.</p></article>
         </div>
       </div>
     </section>
 
-    <section class="advisor-new" id="zespol">
-      <div class="advisor-new-grid">
-        <div class="advisor-new-copy reveal">
-          <span class="section-kicker light">Nasz zespół</span>
-          <blockquote>Najpierw poznajemy Twoją sytuację. Dopiero później porównujemy rozwiązania i pokazujemy różnice, które naprawdę mają znaczenie.</blockquote>
-          <p>Bez nacisku na konkretny produkt. Bez biegania między bankami. Jeden kontakt i jasne porównanie możliwości.</p>
-          <div class="advisor-person">
+    <section class="why-section">
+      <div class="shell why-grid">
+        <div class="why-claim reveal">
+          <span class="section-kicker light">Dlaczego P&T Money</span>
+          <h2>Nie zaczynamy od produktu.<br>Zaczynamy od sytuacji.</h2>
+        </div>
+        <div class="why-list reveal">
+          <div><span>01</span><b>Jeden kontakt</b><p>Klient nie musi samodzielnie kontaktować się z wieloma instytucjami.</p></div>
+          <div><span>02</span><b>Proste porównanie</b><p>Najważniejsze różnice są przedstawione w sposób, który da się realnie ocenić.</p></div>
+          <div><span>03</span><b>Narzędzia przed rozmową</b><p>Kalkulatory angażują i pomagają zrozumieć skalę decyzji jeszcze przed kontaktem.</p></div>
+          <div><span>04</span><b>Wsparcie do końca</b><p>Doradca prowadzi klienta również przez formalną część procesu.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="advisor-meeting" id="zespol">
+      <div class="shell advisor-meeting-grid">
+        <div class="advisor-meeting-copy reveal">
+          <span class="section-kicker light">Człowiek za procesem</span>
+          <h2>Technologia porządkuje decyzję.<br>Doradca pomaga ją podjąć.</h2>
+          <p>Strona nie ma zastępować rozmowy. Ma sprawić, że klient trafia na nią lepiej przygotowany, rozumie swoją sytuację i wie, czego może się spodziewać.</p>
+
+          <div class="advisor-meeting-person">
             <span></span>
-            <div><b>Paulina</b><small>Doradca finansowy w zespole P&T Money</small></div>
+            <div><b>Paulina</b><small>Doradca finansowy · P&T Money</small></div>
           </div>
-          <a class="btn btn-gold magnetic" href="#kontakt">Umów rozmowę z zespołem <span>→</span></a>
+
+          <a class="btn btn-gold magnetic" href="#kontakt">Umów rozmowę <span>→</span></a>
         </div>
 
-        <div class="advisor-new-photo reveal">
+        <div class="advisor-meeting-photo reveal">
           <img src="advisor.jpg" alt="Doradca finansowy P&T Money">
-          <div class="advisor-photo-label"><i></i> Zespół P&T Money</div>
         </div>
       </div>
     </section>
@@ -456,8 +531,8 @@
       <div class="shell contact-new-grid">
         <div class="contact-new-copy reveal">
           <span class="section-kicker">Kontakt</span>
-          <h2>Podaj dane raz.<br>Resztę załatwiamy my.</h2>
-          <p>Oddzwaniamy zwykle w ciągu jednego dnia roboczego. Konsultacja i przygotowanie oferty są zawsze bezpłatne.</p>
+          <h2>Jedna rozmowa.<br>Potem konkrety.</h2>
+          <p>Formularz zbiera tylko dane potrzebne do rozpoczęcia kontaktu. Reszta jest doprecyzowana podczas rozmowy z doradcą.</p>
 
           <div class="contact-details">
             <div><span>Telefon</span><a href="tel:+48000000000">+48 000 000 000</a></div>
@@ -472,11 +547,15 @@
           </div>
           <label><span>E-mail *</span><input required name="email" type="email"></label>
           <div class="form-line">
-            <label><span>Produkt</span>
+            <label><span>Cel kontaktu</span>
               <select name="product">
-                <option>Kredyt gotówkowy</option><option>Kredyt konsolidacyjny</option><option>Kredyt hipoteczny</option>
-                <option>Kredyt firmowy</option><option>Leasing</option><option>Faktoring</option><option>Ubezpieczenia</option>
-                <option>Nie jestem pewien / pewna</option>
+                <option>Kupno / budowa nieruchomości</option>
+                <option>Obniżenie lub uporządkowanie rat</option>
+                <option>Środki na dowolny cel</option>
+                <option>Finansowanie firmy</option>
+                <option>Leasing / faktoring</option>
+                <option>Ubezpieczenia</option>
+                <option>Chcę porozmawiać i wybrać kierunek</option>
               </select>
             </label>
             <label><span>Orientacyjna kwota</span><input name="amount" placeholder="np. 40 000 zł"></label>
@@ -493,45 +572,44 @@
       <div class="shell faq-new-grid">
         <div class="faq-new-head reveal">
           <span class="section-kicker">FAQ</span>
-          <h2>Zanim zadzwonisz — kilka odpowiedzi.</h2>
+          <h2>Najważniejsze pytania przed pierwszym kontaktem.</h2>
         </div>
 
         <div class="faq-list reveal">
           <article class="faq-item-new">
-            <button type="button"><span>Czy skorzystanie z pośrednika kosztuje?</span><i>+</i></button>
-            <div><p>Konsultacja i przygotowanie oferty są bezpłatne dla klienta. Szczegóły dotyczące rozliczenia wyjaśnia doradca przed rozpoczęciem procesu.</p></div>
+            <button type="button"><span>Czy konsultacja jest płatna?</span><i>+</i></button>
+            <div><p>Warunki współpracy i ewentualne koszty są jasno omawiane przed rozpoczęciem procesu. Klient wie, na jakich zasadach działa usługa przed podjęciem decyzji.</p></div>
           </article>
           <article class="faq-item-new">
-            <button type="button"><span>Jak długo czekam na pierwszą ofertę?</span><i>+</i></button>
-            <div><p>Zwykle kontaktujemy się w ciągu jednego dnia roboczego. Czas przygotowania porównania zależy od rodzaju finansowania i kompletności danych.</p></div>
+            <button type="button"><span>Czy muszę wiedzieć, jaki produkt wybrać?</span><i>+</i></button>
+            <div><p>Nie. Punktem wyjścia jest cel i sytuacja klienta. Dopiero później dobierane są rozwiązania, które warto porównać.</p></div>
           </article>
           <article class="faq-item-new">
-            <button type="button"><span>Czy mogę skorzystać przy negatywnej historii w BIK?</span><i>+</i></button>
-            <div><p>Każda sytuacja wymaga indywidualnej analizy. Doradca sprawdzi, jakie możliwości są realnie dostępne przy Twoich parametrach.</p></div>
+            <button type="button"><span>Czy kalkulatory pokazują finalną ofertę?</span><i>+</i></button>
+            <div><p>Nie. Są narzędziem orientacyjnym i pomagają zrozumieć skalę decyzji. Finalne warunki zależą od konkretnej oferty i indywidualnej oceny.</p></div>
           </article>
           <article class="faq-item-new">
-            <button type="button"><span>Co dzieje się z moimi danymi po wysłaniu formularza?</span><i>+</i></button>
-            <div><p>Dane wykorzystujemy do kontaktu i przygotowania procesu ofertowego zgodnie z Polityką prywatności i obowiązującymi przepisami.</p></div>
+            <button type="button"><span>Co dzieje się po wysłaniu formularza?</span><i>+</i></button>
+            <div><p>Doradca kontaktuje się z klientem, zbiera potrzebne informacje i ustala, jakie rozwiązania warto sprawdzić w pierwszej kolejności.</p></div>
           </article>
         </div>
       </div>
     </section>
   </main>
-
-  <footer id="onas">
+<footer id="onas">
     <div class="shell footer-new-grid">
       <div class="footer-new-brand">
         <img src="ptmoney-logo.png" alt="P&T Money">
-        <p>Niezależne pośrednictwo finansowe. Porównujemy rozwiązania i pomagamy przejść przez formalności.</p>
+        <p>Doradztwo finansowe oparte na jasnym procesie, porównaniu możliwości i osobistym kontakcie.</p>
       </div>
       <div><b>Oferta</b><a href="#oferta">Kredyty</a><a href="#oferta">Leasing</a><a href="#oferta">Faktoring</a><a href="#oferta">Ubezpieczenia</a></div>
-      <div><b>Firma</b><a href="#proces">Jak działamy</a><a href="#zespol">Zespół</a><a href="#faq">FAQ</a></div>
+      <div><b>Firma</b><a href="#proces">Jak działamy</a><a href="#zespol">Zespół</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a></div>
       <div><b>Kontakt</b><a href="tel:+48000000000">+48 000 000 000</a><a href="mailto:kontakt@ptmoney.pl">kontakt@ptmoney.pl</a><a href="#kontakt">Umów rozmowę</a></div>
     </div>
     <div class="shell footer-new-bottom"><span>© 2026 P&T Money. Wszelkie prawa zastrzeżone.</span><span><a href="#">Polityka prywatności</a><a href="#">Regulamin</a></span></div>
     <div class="shell footer-legal">P&T Money jest pośrednikiem finansowym. Treści i kalkulacje na stronie mają charakter informacyjny i nie stanowią oferty w rozumieniu Kodeksu cywilnego. Ostateczne warunki finansowania zależą od indywidualnej oceny i oferty wybranej instytucji.</div>
   </footer>
 
-  <script src="ptmoney-v12.js"></script>
+  <script src="ptmoney-meeting.js"></script>
 </body>
 </html>
