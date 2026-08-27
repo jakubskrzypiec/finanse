@@ -8,8 +8,8 @@
   <meta name="description" content="P&T Money — kredyty, leasing, faktoring i ubezpieczenia. Porównujemy rozwiązania finansowe i pomagamy wybrać odpowiednią ofertę.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ptmoney-v14.css">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wdth,wght@75..100,400..600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ptmoney-v15.css">
 </head>
 <body class="cinema-mode">
 <div class="scroll-progress" aria-hidden="true"><span></span></div>
@@ -132,15 +132,15 @@
     <section class="hero hero-after-cinematic">
       <div class="hero-shell shell-wide">
         <div class="hero-copy">
-          <span class="hero-kicker hero-reveal">Doradztwo finansowe · jedna rozmowa, wiele możliwości</span>
+          <span class="hero-kicker hero-reveal">Doradztwo finansowe · zaczynamy od celu, nie od produktu</span>
           <h1>
-            <span class="hero-line"><span>Finanse bez zbędnych</span></span>
-            <span class="hero-line"><span>komplikacji.</span></span>
+            <span class="hero-line"><span>Finanse, które da się</span></span>
+            <span class="hero-line"><span>zrozumieć.</span></span>
           </h1>
 
           <p class="hero-lead hero-reveal delay-1">
-            Porównujemy rozwiązania dostępne na rynku, pokazujemy różnice prostym językiem
-            i prowadzimy Cię przez formalności od pierwszej rozmowy do decyzji.
+            Porównujemy dostępne rozwiązania, pokazujemy różnice prostym językiem
+            i prowadzimy przez cały proces — od pierwszego pytania do finalizacji.
           </p>
 
           <div class="hero-actions hero-reveal delay-2">
@@ -149,86 +149,73 @@
           </div>
         </div>
 
-        <div class="finance-visual" id="financeVisual" aria-label="Wizualizacja porównania ofert finansowych">
-          <div class="gold-orbit orbit-one"></div>
-          <div class="gold-orbit orbit-two"></div>
-          <div class="gold-orbit orbit-three"></div>
-          <span class="spark spark-a"></span>
-          <span class="spark spark-b"></span>
-          <span class="spark spark-c"></span>
+        <div class="finance-visual finance-visual-v15" id="financeVisual" aria-label="Interaktywna wizualizacja analizy finansowej">
+          <div class="v15-orbit orbit-a"></div>
+          <div class="v15-orbit orbit-b"></div>
 
-          <div class="floating-card summary-card float-a">
-            <div class="mini-caption">Podsumowanie</div>
-            <div class="mini-title">Twoje cele</div>
-            <div class="summary-lines"><i></i><i></i><i></i></div>
-            <div class="summary-bars">
-              <span style="height:34%"></span>
-              <span style="height:48%"></span>
-              <span style="height:62%"></span>
-              <span style="height:84%"></span>
-            </div>
+          <div class="visual-satellite satellite-a">
+            <span>Porównanie</span>
+            <b>różnice w jednym widoku</b>
           </div>
 
-          <div class="floating-card comparison-card float-b">
-            <div class="mini-caption">Porównanie ofert</div>
-            <div class="comparison-head"><span>Produkt</span><span>Status</span></div>
-            <div class="comparison-row"><span>Hipoteka</span><i>✓</i></div>
-            <div class="comparison-row"><span>Konsolidacja</span><i>✓</i></div>
-            <div class="comparison-row"><span>Leasing</span><i>✓</i></div>
-            <div class="comparison-row"><span>Faktoring</span><i>✓</i></div>
+          <div class="visual-satellite satellite-b">
+            <span>Wsparcie</span>
+            <b>jeden doradca przez cały proces</b>
           </div>
 
-          <div class="floating-card gauge-card float-c">
-            <div class="mini-caption">Analiza finansowa</div>
-            <div class="gauge">
-              <div><strong>78%</strong><span>Zdolność kredytowa</span></div>
-            </div>
-          </div>
-
-          <div class="floating-card chart-card float-d">
-            <div class="mini-caption">Symulacja raty</div>
-            <svg viewBox="0 0 210 100" aria-hidden="true">
-              <defs>
-                <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#2c7a62" stop-opacity=".18"/>
-                  <stop offset="1" stop-color="#2c7a62" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-              <path d="M4 86 L31 70 L55 73 L81 51 L107 59 L134 39 L160 45 L190 21 L206 13 L206 100 L4 100Z" fill="url(#chartFill)"/>
-              <path class="chart-stroke" d="M4 86 L31 70 L55 73 L81 51 L107 59 L134 39 L160 45 L190 21 L206 13" fill="none" stroke="#2c7a62" stroke-width="2"/>
-              <circle cx="206" cy="13" r="4" fill="#2c7a62"/>
-            </svg>
-            <div class="chart-foot"><span>Prognoza 5 lat</span><span><i></i> stabilna</span></div>
-          </div>
-
-          <div class="recommend-stack tilt" id="recommendStack">
-            <div class="back-sheet back-sheet-a"></div>
-            <div class="back-sheet back-sheet-b"></div>
-
-            <div class="recommend-card">
-              <div class="rec-shine"></div>
-              <div class="rec-kicker">Rekomendowane oferty</div>
-              <p>Wyselekcjonowane specjalnie dla Ciebie</p>
-
-              <div class="rec-list">
-                <div class="rec-row">
-                  <span class="rec-icon">⌂</span>
-                  <div><b>Kredyt hipoteczny</b><small>Najniższa rata dla Ciebie</small></div>
-                  <i></i>
-                </div>
-                <div class="rec-row">
-                  <span class="rec-icon">↙</span>
-                  <div><b>Kredyt konsolidacyjny</b><small>Niższa miesięczna rata</small></div>
-                  <i></i>
-                </div>
-                <div class="rec-row">
-                  <span class="rec-icon">▣</span>
-                  <div><b>Leasing operacyjny</b><small>Optymalizacja kosztów firmy</small></div>
-                  <i></i>
-                </div>
+          <div class="analysis-core tilt" id="recommendStack">
+            <div class="analysis-core-top">
+              <div>
+                <span>Twoja analiza</span>
+                <small>przykładowy widok procesu</small>
               </div>
+              <i><b></b> AKTYWNA</i>
+            </div>
 
-              <a href="#kontakt" class="rec-button">Zobacz rekomendacje <span>→</span></a>
+            <div class="analysis-core-heading">
+              <small>Kierunek rozmowy</small>
+              <strong>Nieruchomość</strong>
+              <p>Najpierw cel i bezpieczny budżet. Później konkretne rozwiązania.</p>
+            </div>
+
+            <div class="analysis-steps">
+              <div class="analysis-step active">
+                <span>01</span>
+                <div><b>Sytuacja</b><small>cel, budżet, ograniczenia</small></div>
+                <i>✓</i>
+              </div>
+              <div class="analysis-step active">
+                <span>02</span>
+                <div><b>Porównanie</b><small>koszt, rata, elastyczność</small></div>
+                <i>✓</i>
+              </div>
+              <div class="analysis-step">
+                <span>03</span>
+                <div><b>Decyzja</b><small>wybór i formalności</small></div>
+                <i>→</i>
+              </div>
+            </div>
+
+            <div class="analysis-chart">
+              <div class="analysis-chart-head">
+                <span>Symulacja obciążenia</span>
+                <small>orientacyjnie</small>
+              </div>
+              <svg viewBox="0 0 480 110" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="analysisFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#b8862e" stop-opacity=".20"/>
+                    <stop offset="1" stop-color="#b8862e" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0 89 C52 86 83 70 124 73 C165 77 194 53 234 56 C280 60 308 39 349 43 C390 47 425 27 480 22 L480 110 L0 110Z" fill="url(#analysisFill)"/>
+                <path class="v15-chart-line" d="M0 89 C52 86 83 70 124 73 C165 77 194 53 234 56 C280 60 308 39 349 43 C390 47 425 27 480 22" fill="none" stroke="#b8862e" stroke-width="2"/>
+              </svg>
+            </div>
+
+            <div class="analysis-core-foot">
+              <span>Cel → analiza → porównanie → decyzja</span>
+              <i>↗</i>
             </div>
           </div>
         </div>
@@ -256,12 +243,18 @@
       </div>
     </section>
 
+    <div class="journey-rail" aria-hidden="true">
+      <div class="shell">
+        <span>01 Cel</span><i></i><span>02 Analiza</span><i></i><span>03 Porównanie</span><i></i><span>04 Decyzja</span>
+      </div>
+    </div>
+
     <section class="decision section" id="wybor">
       <div class="shell">
         <div class="decision-head reveal">
           <span class="section-kicker">Zacznij od swojej sytuacji</span>
-          <h2>Nie musisz wiedzieć,<br>jakiego produktu potrzebujesz.</h2>
-          <p>Wybierz cel. Pokażemy Ci, od czego warto zacząć i jakie rozwiązania najczęściej sprawdzamy w podobnej sytuacji.</p>
+          <h2>Najpierw cel.<br>Dopiero później produkt.</h2>
+          <p>Klient nie musi znać bankowych nazw. Wybiera swoją sytuację, a strona od razu pokazuje logiczny kierunek dalszego działania.</p>
         </div>
 
         <div class="decision-workspace reveal" id="decisionWorkspace">
@@ -310,8 +303,8 @@
       <div class="shell comparison-story-grid">
         <div class="comparison-story-copy reveal">
           <span class="section-kicker light">Przejrzystość zamiast chaosu</span>
-          <h2>Jedna rozmowa.<br>Różnice w jednym widoku.</h2>
-          <p>Zamiast zostawiać klienta z nazwami produktów i tabelami bankowymi, porządkujemy najważniejsze parametry i pokazujemy je w czytelny sposób.</p>
+          <h2>Jedno miejsce.<br>Najważniejsze różnice obok siebie.</h2>
+          <p>Zamiast przerzucać klienta między ofertami, porządkujemy parametry, które naprawdę wpływają na decyzję.</p>
           <div class="comparison-story-note">
             <span></span>
             <p>Przykładowy sposób prezentacji ofert — dane demonstracyjne.</p>
@@ -360,7 +353,7 @@
         <div class="products-intro reveal">
           <div>
             <span class="section-kicker">Oferta</span>
-            <h2>Siedem produktów.<br>Jeden sposób obsługi.</h2>
+            <h2>Pełna oferta.<br>Jedna prosta ścieżka.</h2>
           </div>
           <p>Niezależnie od rodzaju finansowania, klient nie musi sam porównywać dokumentów i warunków. Zaczynamy od celu, później dobieramy rozwiązanie.</p>
         </div>
@@ -381,7 +374,7 @@
       <div class="shell rate-grid">
         <div class="rate-copy reveal">
           <span class="section-kicker light">Kalkulator raty</span>
-          <h2>Najpierw zobacz skalę.<br>Później sprawdź realne opcje.</h2>
+          <h2>Policz skalę decyzji.<br>Potem porozmawiaj o konkretach.</h2>
           <p>Prosta symulacja pomaga klientowi wejść w temat bez formularza i bez rozmowy. Po wyniku naturalnie przechodzimy do konkretnej analizy.</p>
           <a class="text-link" href="#kontakt">Przejdź od symulacji do oferty <span>↗</span></a>
         </div>
@@ -477,7 +470,7 @@
       <div class="shell">
         <div class="process-premium-head reveal">
           <span class="section-kicker">Jak działamy</span>
-          <h2>Klient zawsze wie,<br>co dzieje się dalej.</h2>
+          <h2>Cztery etapy.<br>Zero zgadywania co dalej.</h2>
           <p>Proces został zaprojektowany tak, żeby nie wymagał znajomości bankowych procedur ani produktów.</p>
         </div>
 
@@ -495,7 +488,7 @@
       <div class="shell why-grid">
         <div class="why-claim reveal">
           <span class="section-kicker light">Dlaczego P&T Money</span>
-          <h2>Nie zaczynamy od produktu.<br>Zaczynamy od sytuacji.</h2>
+          <h2>Strona przygotowuje klienta.<br>Doradca domyka decyzję.</h2>
         </div>
         <div class="why-list reveal">
           <div><span>01</span><b>Jeden kontakt</b><p>Klient nie musi samodzielnie kontaktować się z wieloma instytucjami.</p></div>
@@ -510,8 +503,8 @@
       <div class="shell advisor-meeting-grid">
         <div class="advisor-meeting-copy reveal">
           <span class="section-kicker light">Człowiek za procesem</span>
-          <h2>Technologia porządkuje decyzję.<br>Doradca pomaga ją podjąć.</h2>
-          <p>Strona nie ma zastępować rozmowy. Ma sprawić, że klient trafia na nią lepiej przygotowany, rozumie swoją sytuację i wie, czego może się spodziewać.</p>
+          <h2>Za procesem zawsze<br>stoi człowiek.</h2>
+          <p>Narzędzia mają uporządkować temat przed rozmową. Finalnie to doradca pomaga ocenić możliwości, wyjaśnia różnice i prowadzi klienta przez formalności.</p>
 
           <div class="advisor-meeting-person">
             <span></span>
@@ -531,7 +524,7 @@
       <div class="shell contact-new-grid">
         <div class="contact-new-copy reveal">
           <span class="section-kicker">Kontakt</span>
-          <h2>Jedna rozmowa.<br>Potem konkrety.</h2>
+          <h2>Zacznij od rozmowy.<br>Resztę uporządkujemy.</h2>
           <p>Formularz zbiera tylko dane potrzebne do rozpoczęcia kontaktu. Reszta jest doprecyzowana podczas rozmowy z doradcą.</p>
 
           <div class="contact-details">
@@ -610,6 +603,6 @@
     <div class="shell footer-legal">P&T Money jest pośrednikiem finansowym. Treści i kalkulacje na stronie mają charakter informacyjny i nie stanowią oferty w rozumieniu Kodeksu cywilnego. Ostateczne warunki finansowania zależą od indywidualnej oceny i oferty wybranej instytucji.</div>
   </footer>
 
-  <script src="ptmoney-v14.js"></script>
+  <script src="ptmoney-v15.js"></script>
 </body>
 </html>

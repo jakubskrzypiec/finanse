@@ -1,0 +1,77 @@
+P&T MONEY — TALK TRACK NA SPOTKANIE
+
+1. OTWARCIE — 30–45 sekund
+„Nie chciałem zrobić Wam po prostu ładniejszej strony. Przy finansach sama estetyka nie wystarczy. Klient ma wejść, szybko zrozumieć komu może zaufać, odnaleźć swoją sytuację i naturalnie dojść do rozmowy z doradcą. Dlatego ten projekt budowałem bardziej jak ścieżkę decyzji niż klasyczną wizytówkę.”
+
+2. WEJŚCIE Z LAPTOPEM
+„Na początku chciałem zrobić coś charakterystycznego dla marki, ale spokojnego. To nie jest animacja dla animacji. Laptop i wejście w ekran mają dać wrażenie wejścia do uporządkowanego środowiska finansowego. Po chwili efekt znika i zostaje normalna, bardzo czytelna strona.”
+
+Ważne: nie zatrzymuj się tu długo. 10–15 sekund.
+
+3. HERO
+„Pierwszy ekran odpowiada na trzy rzeczy: czym się zajmujecie, dlaczego klient ma zostać i co ma zrobić dalej. Nie bombardujemy go produktami. Mówimy o uproszczeniu finansów, pokazujemy analizę po prawej i dwa jasne CTA.”
+
+Wskaż po prawej:
+„Ten moduł nie udaje bankowego dashboardu. Ma wizualizować Wasz sposób pracy: sytuacja → porównanie → decyzja. Czyli technologicznie i nowocześnie, ale cały czas po ludzku.”
+
+4. „NAJPIERW CEL, DOPIERO PRODUKT” — GŁÓWNY WYRÓŻNIK
+„To jest według mnie najważniejsza część strony. Klient często nie wie, czy potrzebuje refinansowania, konsolidacji albo konkretnego rodzaju kredytu. Wie natomiast, że kupuje mieszkanie, chce obniżyć raty, potrzebuje gotówki albo finansuje firmę.”
+
+Klikaj kolejno 2–3 opcje.
+
+„Zamiast zmuszać klienta do poznania Waszej oferty, strona tłumaczy jego sytuację na konkretny kierunek rozmowy. To skraca drogę do kontaktu i sprawia, że lead jest lepiej przygotowany.”
+
+5. PORÓWNANIE
+„Kolejny krok to pokazanie wartości pośrednika. Nie sprzedajemy komunikatu ‘mamy dużo produktów’. Pokazujemy: my porządkujemy różnice, żeby klient nie musiał sam porównywać ofert i parametrów.”
+
+Kliknij Rata / Koszt / Elastyczność.
+
+„To może docelowo korzystać z prawdziwych danych albo pozostać sposobem wizualizacji Waszej pracy. Na tym etapie jest to demonstracja UX.”
+
+6. OFERTA
+„Dopiero tutaj pokazujemy pełną ofertę. Klient wcześniej już rozumie, po co jesteście i jak działacie, więc siedem produktów nie wygląda jak katalog. To jest odpowiedź na potrzebę, a nie punkt startowy.”
+
+7. KALKULATOR RATY
+„To ma zatrzymać użytkownika na stronie i dać mu pierwszą wartość bez zostawiania danych. Sam wynik nie ma zastępować oferty — ma wywołać pytanie: okej, a jakie warunki mogę dostać naprawdę?”
+
+Zmień kwotę albo okres.
+
+„I wtedy CTA prowadzi do rozmowy.”
+
+8. REFINANSOWANIE
+„Tutaj robimy to samo dla bardziej świadomego klienta hipotecznego. Zamiast tekstu ‘zajmujemy się refinansowaniem’, pozwalamy mu samemu zobaczyć potencjalną różnicę. To jest dużo mocniejszy argument sprzedażowy.”
+
+9. PROCES
+„W finansach największą barierą często nie jest tylko cena, ale niepewność: ile to potrwa, jakie dokumenty, co będzie dalej. Dlatego pokazujemy cztery proste etapy. Klient od początku widzi, że ktoś go poprowadzi.”
+
+10. DLACZEGO P&T
+„Tutaj domykamy pozycjonowanie: jeden kontakt, proste porównanie, narzędzia przed rozmową i wsparcie do końca. Czyli nie konkurujemy hasłem ‘mamy kredyty’, bo to mówi każdy. Konkurujemy sposobem obsługi.”
+
+11. PAULINA / CZŁOWIEK
+„Po całej technologii wracamy do człowieka. To jest ważne, bo przy dużych decyzjach finansowych klient nie chce finalnie rozmawiać z kalkulatorem. Strona ma przygotować go do rozmowy, nie zastąpić doradcę.”
+
+12. FORMULARZ
+„Formularz jest dopiero na końcu świadomej ścieżki. Klient wcześniej dostał odpowiedzi, zobaczył sposób pracy i narzędzia. Dlatego kontakt nie jest przypadkowym ‘zostaw numer’, tylko naturalnym kolejnym krokiem.”
+
+13. JAK PODSUMOWAĆ PROJEKT
+„W skrócie: chciałem, żeby ta strona robiła trzy rzeczy. Po pierwsze budowała wiarygodność. Po drugie tłumaczyła finanse prostym językiem. Po trzecie przygotowywała klienta do rozmowy, żeby do Was trafiały bardziej świadome zapytania.”
+
+14. PYTANIA, KTÓRE WARTO IM ZADAĆ
+- „Które produkty są dla Was dziś najważniejsze biznesowo?”
+- „Jaki typ klienta najbardziej chcecie pozyskiwać ze strony?”
+- „Czy częściej klient przychodzi już po konkretny produkt, czy dopiero z problemem / celem?”
+- „Jak teraz wygląda pierwsza rozmowa z leadem?”
+- „Które informacje najczęściej musicie klientowi tłumaczyć od zera?”
+- „Czy macie dane / system, z którego docelowo można zasilać kalkulatory albo porównania?”
+- „Co jest dla Was największym wyróżnikiem względem innych pośredników?”
+- „Czy po stronie ma być mocniej klient indywidualny, firma, czy oba segmenty?”
+
+15. CZEGO NIE MÓWIĆ
+Nie mów: „dodałem fajną animację”, „zrobiłem kafelki”, „tu jest kalkulator”.
+Mów: „to buduje zaufanie”, „to skraca drogę klienta”, „to tłumaczy Waszą wartość”, „to przygotowuje lead do rozmowy”.
+
+16. JEŚLI ZAPYTAJĄ O TO, CO JEST DEMO
+„Interaktywne porównanie i wartości w kalkulatorach są teraz demonstracyjne. Po ustaleniu procesu możemy zdecydować, które elementy mają być tylko UX-em, a które mają korzystać z realnych danych i logiki biznesowej.”
+
+17. ZAMKNIĘCIE
+„To jest oczywiście kierunek, nie zamknięty projekt. Chciałem dziś pokazać przede wszystkim logikę strony i feeling marki. Jeżeli ten kierunek jest Wasz, po spotkaniu dopracujemy content, priorytety produktowe i dokładną ścieżkę kontaktu.”
