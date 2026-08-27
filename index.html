@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ptmoney-v9.css">
+  <link rel="stylesheet" href="ptmoney-v10.css">
 </head>
 <body class="cinema-mode">
 <div class="scroll-progress" aria-hidden="true"><span></span></div>
@@ -52,34 +52,60 @@
 
 
 
+
   <section class="cinematic-entry" id="cinematicEntry" aria-label="Wprowadzenie do P&T Money">
     <div class="cinematic-sticky">
       <div class="office-world" id="officeWorld">
         <div class="office-wall">
-          <div class="wall-panel wall-panel-left"></div>
-          <div class="wall-panel wall-panel-right"></div>
-          <div class="wall-glow"></div>
-          <div class="wall-brass-line"></div>
+          <div class="office-panel p1"></div>
+          <div class="office-panel p2"></div>
+          <div class="office-panel p3"></div>
+          <div class="office-ambient"></div>
+          <div class="office-brass"></div>
         </div>
 
-        <div class="desk-surface">
-          <div class="desk-front"></div>
-        </div>
+        <div class="desk-surface"><div class="desk-edge"></div></div>
 
         <div class="laptop-stage" id="laptopWrap">
-          <div class="laptop-shadow"></div>
+          <div class="laptop-ground-shadow"></div>
 
           <div class="laptop-display" id="laptopDisplay">
+            <div class="display-highlight"></div>
             <div class="laptop-bezel" id="laptopBezel">
-              <span class="laptop-camera"></span>
+              <span class="camera-dot"></span>
 
               <div class="laptop-screen" id="laptopScreen">
+                <div class="screen-reflection"></div>
+
                 <div class="screen-brand" id="screenBrand">
                   <img src="ptmoney-logo.png" alt="P&T Money">
                 </div>
 
-                <div class="screen-preview" id="screenPreview">
-                  <div class="screen-hero-clone" id="screenHeroClone"></div>
+                <div class="screen-portal" id="screenPortal">
+                  <div class="portal-top">
+                    <img src="ptmoney-logo.png" alt="">
+                    <span>Twój przegląd finansowy</span>
+                  </div>
+
+                  <div class="portal-body">
+                    <div class="portal-copy">
+                      <small>P&T MONEY</small>
+                      <strong>Wiele możliwości.<br>Jedna jasna decyzja.</strong>
+                      <p>Porównanie rozwiązań w jednym miejscu.</p>
+                    </div>
+
+                    <div class="portal-stack">
+                      <div class="portal-sheet sheet-back"></div>
+                      <div class="portal-sheet sheet-front">
+                        <div class="sheet-title"><span>Możliwe rozwiązania</span><i></i></div>
+                        <div class="sheet-row"><b>Kredyt hipoteczny</b><span>sprawdzone</span></div>
+                        <div class="sheet-row"><b>Konsolidacja</b><span>sprawdzone</span></div>
+                        <div class="sheet-row"><b>Leasing</b><span>sprawdzone</span></div>
+                        <div class="sheet-line"></div>
+                      </div>
+                      <div class="portal-ring"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -88,17 +114,16 @@
           <div class="laptop-hinge"></div>
 
           <div class="laptop-deck" id="laptopDeck">
-            <div class="keyboard">
-              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <div class="keyboard-soft">
               <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
               <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span><span></span>
             </div>
-            <div class="trackpad"></div>
+            <div class="trackpad-soft"></div>
+            <div class="deck-notch"></div>
           </div>
         </div>
       </div>
-
-      <div class="hero-handoff" id="heroHandoff" aria-hidden="true"></div>
     </div>
   </section>
 
@@ -108,13 +133,13 @@
       <div class="hero-shell shell-wide">
         <div class="hero-copy">
           <h1>
-            <span class="hero-line"><span>Moc bankowości.</span></span>
-            <span class="hero-line"><span>Prostota finansów.</span></span>
+            <span class="hero-line"><span>Finanse bez zbędnych</span></span>
+            <span class="hero-line"><span>komplikacji.</span></span>
           </h1>
 
           <p class="hero-lead hero-reveal delay-1">
-            Profesjonalny doradca, przejrzyste rozwiązania i wiele instytucji,
-            aby dopasować finansowanie do Twoich celów.
+            Porównujemy dostępne możliwości, jasno pokazujemy różnice
+            i prowadzimy Cię od pierwszej rozmowy do decyzji.
           </p>
 
           <div class="hero-actions hero-reveal delay-2">
@@ -507,6 +532,6 @@
     <div class="shell footer-legal">P&T Money jest pośrednikiem finansowym. Treści i kalkulacje na stronie mają charakter informacyjny i nie stanowią oferty w rozumieniu Kodeksu cywilnego. Ostateczne warunki finansowania zależą od indywidualnej oceny i oferty wybranej instytucji.</div>
   </footer>
 
-  <script src="ptmoney-v9.js"></script>
+  <script src="ptmoney-v10.js"></script>
 </body>
 </html>
