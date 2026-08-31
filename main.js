@@ -16,46 +16,80 @@
   const headerLogo = $('#headerLogo');
   const heroGrid = $('.hero-grid');
   const header = $('.site-header');
-  const introFocusableRoots = [header, $('#main')].filter(Boolean);
+  const forceIntro = new URLSearchParams(window.location.search).get('intro') === '1';
+  const focusRoots = [$('.skip-link'), header, $('#main'), $('.site-footer'), $('.mobile-bottom-bar')].filter(Boolean);
   let introActive = false;
   let ticking = false;
-  let dock = { x: 0, y: 0 };
+  let dock = { x: 0, y: 0, scale: 1 };
 
   const clamp01 = value => Math.max(0, Math.min(1, value));
   const phase = (p, from, to) => clamp01((p - from) / (to - from));
-  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  // Exact cubic-bezier(.22,.7,.2,1) evaluator for scrubbed phase progress.
+  function ease(t) {
+    const x1 = .22, y1 = .7, x2 = .2, y2 = 1;
+    const sample = (u, a1, a2) => 3 * (1 - u) * (1 - u) * u * a1 + 3 * (1 - u) * u * u * a2 + u * u * u;
+    const derivative = (u, a1, a2) => 3 * (1 - u) * (1 - u) * a1 + 6 * (1 - u) * u * (a2 - a1) + 3 * u * u * (1 - a2);
+    let u = clamp01(t);
+    for (let i = 0; i < 5; i += 1) {
+      const dx = sample(u, x1, x2) - t;
+      const d = derivative(u, x1, x2);
+      if (Math.abs(d) < 1e-6) break;
+      u = clamp01(u - dx / d);
+    }
+    return sample(u, y1, y2);
+  }
 
   function setPageInert(inert) {
-    introFocusableRoots.forEach(root => {
+    focusRoots.forEach(root => {
       if ('inert' in root) root.inert = inert;
-      else root.setAttribute('aria-hidden', inert ? 'true' : 'false');
+      else if (inert) root.setAttribute('aria-hidden', 'true');
+      else root.removeAttribute('aria-hidden');
     });
   }
 
   function measureDock() {
-    if (!introMonogram || !headerLogo) return;
-    const source = introMonogram.getBoundingClientRect();
+    if (!introMonogram || !headerLogo || !introSpacer) return;
+
+    // Read the REAL header logo rect. The spacer sits before the header in flow,
+    // so subtract only the still-visible part of the spacer to get the logo's
+    // true dock position after the intro zone has been consumed.
     const target = headerLogo.getBoundingClientRect();
+    const spacerRect = introSpacer.getBoundingClientRect();
+    const remainingSpacer = Math.max(0, spacerRect.bottom - Math.max(0, spacerRect.top));
+
+    const previousTransform = introMonogram.style.transform;
+    introMonogram.style.transform = 'none';
+    const source = introMonogram.getBoundingClientRect();
+    introMonogram.style.transform = previousTransform;
+
     const sourceCx = source.left + source.width / 2;
     const sourceCy = source.top + source.height / 2;
     const targetCx = target.left + target.width / 2;
-    const targetCy = target.top + target.height / 2;
+    const targetCy = target.top + target.height / 2 - remainingSpacer;
+
     dock.x = targetCx - sourceCx;
     dock.y = targetCy - sourceCy;
+    dock.scale = Math.max(.1, target.height / Math.max(1, source.height));
   }
 
-  function finishIntro({ remember = true } = {}) {
+  function hideIntro({ remember = false, preserveViewport = false } = {}) {
+    const zone = introSpacer?.offsetHeight || 0;
+    const before = window.scrollY;
     introActive = false;
-    html.classList.remove('js-intro', 'intro-ready');
     setPageInert(false);
+    html.classList.remove('js-intro', 'intro-docked');
     if (intro) {
       intro.style.pointerEvents = 'none';
       intro.style.display = 'none';
     }
-    if (introSpacer) introSpacer.style.display = 'none';
     if (heroGrid) {
       heroGrid.style.opacity = '1';
       heroGrid.style.transform = 'none';
+    }
+    // Collapsing the spacer at p=1 would otherwise move the document up by 100vh/60vh.
+    // Counter-scroll by exactly that measured height, so the visible content does not jump.
+    if (preserveViewport && zone > 0) {
+      window.scrollTo(0, Math.max(0, before - zone));
     }
     if (remember) {
       try { sessionStorage.setItem('ptm-intro-seen', '1'); } catch (e) {}
@@ -68,39 +102,42 @@
 
     const zone = Math.max(1, introSpacer.offsetHeight);
     const p = clamp01(window.scrollY / zone);
-    const textP = easeOut(phase(p, 0, .30));
-    const logoP = easeOut(phase(p, .25, .85));
-    const coverP = easeOut(phase(p, .55, 1));
-    const heroP = easeOut(phase(p, .55, 1));
-    const desktopScale = window.innerWidth < 900 ? 1.2 : 1.35;
-    const scaleUp = 1 + (desktopScale - 1) * phase(p, .25, .75);
-    const dockScale = headerLogo ? Math.max(.1, headerLogo.getBoundingClientRect().height / Math.max(1, introMonogram.getBoundingClientRect().height / scaleUp)) : 1;
-    const scale = p < .75 ? scaleUp : scaleUp + (dockScale - scaleUp) * easeOut(phase(p, .75, .85));
+    const textP = ease(phase(p, 0, .30));
+    const moveP = ease(phase(p, .25, .85));
+    const growP = ease(phase(p, .25, .75));
+    const settleP = ease(phase(p, .75, .85));
+    const coverP = ease(phase(p, .55, 1));
+    const heroP = ease(phase(p, .55, 1));
+    const maxScale = window.innerWidth < 900 ? 1.2 : 1.35;
+    const grownScale = 1 + (maxScale - 1) * growP;
+    const scale = grownScale + (dock.scale - grownScale) * settleP;
 
     if (introCopy) {
       introCopy.style.opacity = String(1 - textP);
-      introCopy.style.transform = `translateY(${24 * textP}px)`;
+      introCopy.style.transform = `translate3d(0, ${24 * textP}px, 0)`;
       introCopy.style.filter = `blur(${4 * textP}px)`;
     }
     if (introScrollHint) {
       introScrollHint.style.opacity = String(1 - textP);
+      introScrollHint.style.transform = `translate3d(-50%, ${24 * textP}px, 0)`;
       introScrollHint.style.filter = `blur(${4 * textP}px)`;
     }
 
-    introMonogram.style.transform = `translate3d(${dock.x * logoP}px, ${dock.y * logoP}px, 0) scale(${scale})`;
+    introMonogram.style.transform = `translate3d(${dock.x * moveP}px, ${dock.y * moveP}px, 0) scale(${scale})`;
     intro.style.opacity = String(1 - coverP);
     intro.style.clipPath = `inset(0 0 ${100 * coverP}% 0)`;
 
     if (heroGrid) {
       heroGrid.style.opacity = String(heroP);
-      heroGrid.style.transform = `translateY(${28 * (1 - heroP)}px) scale(${1 + .02 * (1 - heroP)})`;
+      heroGrid.style.transform = `translate3d(0, ${28 * (1 - heroP)}px, 0) scale(${1 + .02 * (1 - heroP)})`;
     }
 
     const docked = p >= .85;
     intro.style.pointerEvents = docked ? 'none' : 'auto';
     setPageInert(!docked);
+    html.classList.toggle('intro-docked', docked);
 
-    if (p >= .999) finishIntro();
+    if (p >= 1) hideIntro({ remember: true, preserveViewport: true });
   }
 
   function requestIntroFrame() {
@@ -109,12 +146,14 @@
     requestAnimationFrame(renderIntro);
   }
 
-  const shouldSkipIntro = reduceMotion || location.hash || window.scrollY > 0 || !html.classList.contains('js-intro');
-  if (shouldSkipIntro) {
-    finishIntro({ remember: false });
+  let seenIntro = false;
+  try { seenIntro = sessionStorage.getItem('ptm-intro-seen') === '1'; } catch (e) {}
+  const shouldSkipIntro = reduceMotion || (!forceIntro && (seenIntro || Boolean(location.hash) || window.scrollY > 0));
+
+  if (shouldSkipIntro || !html.classList.contains('js-intro')) {
+    hideIntro({ remember: false });
   } else if (intro && introSpacer && introMonogram && headerLogo) {
     introActive = true;
-    html.classList.add('intro-ready');
     setPageInert(true);
     requestAnimationFrame(() => {
       measureDock();
@@ -123,10 +162,13 @@
     window.addEventListener('scroll', requestIntroFrame, { passive: true });
     window.addEventListener('resize', () => {
       if (!introActive) return;
-      requestAnimationFrame(() => { measureDock(); renderIntro(); });
+      requestAnimationFrame(() => {
+        measureDock();
+        renderIntro();
+      });
     }, { passive: true });
   } else {
-    finishIntro({ remember: false });
+    hideIntro({ remember: false });
   }
 
   /* ---------- Compact sticky header ---------- */
@@ -308,15 +350,37 @@
   const productSelect = $('#fProduct');
   const amountField = $('#fAmount');
   const nameField = $('#fName');
+  const productMap = {
+    'kredyt-gotowkowy': 'Kredyt gotówkowy',
+    'kredyt-konsolidacyjny': 'Kredyt konsolidacyjny',
+    'kredyt-hipoteczny': 'Kredyt hipoteczny',
+    'kredyt-firmowy': 'Kredyt firmowy',
+    'leasing': 'Leasing',
+    'faktoring': 'Faktoring',
+    'ubezpieczenia': 'Ubezpieczenia'
+  };
 
-  function goToForm(product) {
-    if (product && productSelect) productSelect.value = product;
-    if (contactSection) contactSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-    window.setTimeout(() => nameField?.focus({ preventScroll: true }), reduceMotion ? 0 : 500);
+  function selectProduct(product) {
+    if (!productSelect || !product) return;
+    const value = productMap[product] || product;
+    const option = [...productSelect.options].find(item => item.value === value || item.textContent.trim() === value);
+    if (option) productSelect.value = option.value;
   }
 
-  $$('.product-select').forEach(button => {
-    button.addEventListener('click', () => goToForm(button.dataset.product));
+  const requestedProduct = new URLSearchParams(window.location.search).get('produkt');
+  selectProduct(requestedProduct);
+
+  $$('.product-select').forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+      const product = link.dataset.product;
+      selectProduct(product);
+      const slug = Object.entries(productMap).find(([, value]) => value === product)?.[0] || '';
+      const nextUrl = `${window.location.pathname}${slug ? `?produkt=${encodeURIComponent(slug)}` : ''}#kontakt`;
+      history.replaceState(null, '', nextUrl);
+      contactSection?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      window.setTimeout(() => nameField?.focus({ preventScroll: true }), reduceMotion ? 0 : 420);
+    });
   });
 
   const calcCta = $('#calcCta');
@@ -403,9 +467,11 @@
   /* ---------- Form ---------- */
   const form = $('#leadForm');
   const success = $('#formSuccess');
+  const successText = $('#formSuccessText');
   const phoneField = $('#fPhone');
   const emailField = $('#fEmail');
   const consentField = $('#fConsent');
+  const optionalDetails = $('#optionalDetails');
 
   function phoneDigits(value) {
     let digits = String(value || '').replace(/\D/g, '');
@@ -420,9 +486,7 @@
     return `+48 ${groups.join(' ')}`;
   }
 
-  if (phoneField) {
-    phoneField.addEventListener('input', () => { phoneField.value = formatPhone(phoneField.value); });
-  }
+  if (phoneField) phoneField.addEventListener('input', () => { phoneField.value = formatPhone(phoneField.value); });
 
   function setFieldValidity(input, valid) {
     if (!input) return valid;
@@ -435,22 +499,25 @@
   function validateForm() {
     const nameOk = (nameField?.value.trim().length || 0) >= 2;
     const phoneOk = phoneDigits(phoneField?.value).length === 9;
+    const productOk = Boolean(productSelect?.value);
     const email = emailField?.value.trim() || '';
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const emailOk = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const consentOk = Boolean(consentField?.checked);
 
     setFieldValidity(nameField, nameOk);
     setFieldValidity(phoneField, phoneOk);
+    setFieldValidity(productSelect, productOk);
     setFieldValidity(emailField, emailOk);
     const consentWrap = consentField?.closest('.consent-wrap');
     consentWrap?.classList.toggle('is-invalid', !consentOk);
     consentField?.setAttribute('aria-invalid', String(!consentOk));
 
-    return nameOk && phoneOk && emailOk && consentOk;
+    if (!emailOk && optionalDetails) optionalDetails.open = true;
+    return nameOk && phoneOk && productOk && emailOk && consentOk;
   }
 
-  [nameField, phoneField, emailField].forEach(input => {
-    input?.addEventListener('input', () => {
+  [nameField, phoneField, productSelect, emailField].forEach(input => {
+    input?.addEventListener(input?.tagName === 'SELECT' ? 'change' : 'input', () => {
       if (input.getAttribute('aria-invalid') === 'true') validateForm();
     });
   });
@@ -468,13 +535,13 @@
         return;
       }
 
+      const submittedPhone = phoneField?.value || '';
       const submit = $('button[type="submit"]', form);
       const originalText = submit?.textContent;
       if (submit) { submit.disabled = true; submit.textContent = 'Wysyłanie…'; }
 
       const endpoint = (form.dataset.endpoint || form.getAttribute('action') || '').trim();
       let sent = true;
-
       if (endpoint && endpoint !== '#') {
         try {
           const response = await fetch(endpoint, {
@@ -483,24 +550,25 @@
             headers: { Accept: 'application/json' }
           });
           sent = response.ok;
-        } catch (e) {
-          sent = false;
-        }
+        } catch (e) { sent = false; }
       } else {
         await new Promise(resolve => window.setTimeout(resolve, 280));
       }
 
       if (submit) { submit.disabled = false; submit.textContent = originalText; }
-
       if (!sent) {
-        window.alert('Nie udało się wysłać zgłoszenia. Spróbuj ponownie lub skontaktuj się telefonicznie.');
+        window.alert('Nie udało się wysłać zgłoszenia. Spróbuj ponownie.');
         return;
       }
 
+      if (successText) {
+        successText.textContent = `Zgłoszenie przyjęte. Doradca oddzwoni w ciągu jednego dnia roboczego na numer ${submittedPhone}.`;
+      }
+      if (success) success.hidden = false;
       form.reset();
+      if (optionalDetails) optionalDetails.open = false;
       $$('.field.is-invalid', form).forEach(field => field.classList.remove('is-invalid'));
       $('.consent-wrap', form)?.classList.remove('is-invalid');
-      if (success) success.hidden = false;
     });
   }
 })();
