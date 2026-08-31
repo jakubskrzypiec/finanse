@@ -3,137 +3,30 @@
 
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
-  const html = document.documentElement;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const formatInt = new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 });
 
-  html.classList.add('js');
+  /* ---------- Intro: raz na sesję + twardy timeout ---------- */
+  const html = document.documentElement;
+  const intro = $('#siteIntro');
+  let introDone = false;
 
-  /* ---------- Legacy intro: neutralised, no timed preloader ---------- */
-  html.classList.remove('intro-pending', 'intro-running', 'intro-leaving');
-  $('#siteIntro')?.remove();
+  const finishIntro = () => {
+    if (introDone) return;
+    introDone = true;
+    html.classList.remove('intro-pending', 'intro-running', 'intro-leaving');
+    if (intro) intro.remove();
+    try { sessionStorage.setItem('ptm-intro-seen', '1'); } catch (e) {}
+  };
 
-  /* ---------- One orchestrated brand movement ---------- */
-  const hero = $('.hero');
-  const headerBrand = $('.brand img');
-  let flight = null;
-  let flightDx = 0;
-  let flightDy = 0;
-  let flightScale = 0.28;
-  let flightScrollEnd = Math.max(360, window.innerHeight * 0.72);
-  let flightTicking = false;
-  let scrollFallbackBound = false;
-
-  const scrollTimelineSupported = !reduceMotion &&
-    'CSS' in window &&
-    typeof CSS.supports === 'function' &&
-    CSS.supports('animation-timeline: scroll()');
-
-  const clamp01 = value => Math.max(0, Math.min(1, value));
-
-  function createFlightMark() {
-    if (reduceMotion || !hero || !headerBrand) return;
-
-    flight = document.createElement('div');
-    flight.className = 'hero-brand-flight';
-    flight.setAttribute('aria-hidden', 'true');
-
-    const blue = document.createElement('img');
-    blue.src = 'logo-mark-blue.png';
-    blue.alt = '';
-    blue.width = 785;
-    blue.height = 707;
-    blue.decoding = 'async';
-
-    const black = document.createElement('img');
-    black.src = 'logo-mark-black.png';
-    black.alt = '';
-    black.width = 785;
-    black.height = 707;
-    black.decoding = 'async';
-
-    flight.append(blue, black);
-    hero.prepend(flight);
-
-    requestAnimationFrame(() => {
-      measureFlight();
-      html.classList.add('motion-ready');
-
-      if (scrollTimelineSupported) {
-        html.classList.add('has-scroll-timeline');
-      } else {
-        html.classList.add('has-scroll-fallback');
-        bindScrollFallback();
-        updateFlightFallback();
-      }
-    });
+  if (html.classList.contains('intro-pending') && intro && !reduceMotion) {
+    html.classList.add('intro-running');
+    window.setTimeout(() => html.classList.add('intro-leaving'), 920);
+    window.setTimeout(finishIntro, 1180);
+    window.setTimeout(finishIntro, 1500);
+  } else {
+    finishIntro();
   }
-
-  function measureFlight() {
-    if (!flight || !headerBrand) return;
-
-    const flightRect = flight.getBoundingClientRect();
-    const targetRect = headerBrand.getBoundingClientRect();
-
-    if (!flightRect.width || !targetRect.height) return;
-
-    const targetMarkWidth = targetRect.height * (785 / 707);
-    const targetX = targetRect.left + (targetMarkWidth / 2);
-    const targetY = targetRect.top + (targetRect.height / 2);
-    const sourceX = flightRect.left + (flightRect.width / 2);
-    const sourceY = flightRect.top + (flightRect.height / 2);
-
-    flightDx = targetX - sourceX;
-    flightDy = targetY - sourceY;
-    flightScale = targetMarkWidth / flightRect.width;
-    flightScrollEnd = Math.max(360, window.innerHeight * 0.72);
-
-    flight.style.setProperty('--flight-x', `${flightDx}px`);
-    flight.style.setProperty('--flight-y', `${flightDy}px`);
-    flight.style.setProperty('--flight-scale', String(flightScale));
-  }
-
-  function updateFlightFallback() {
-    flightTicking = false;
-    if (!flight || reduceMotion) return;
-
-    const progress = clamp01(window.scrollY / flightScrollEnd);
-    const scale = 1 + ((flightScale - 1) * progress);
-    const flightOpacity = progress <= 0.8 ? 1 : clamp01(1 - ((progress - 0.8) / 0.2));
-    const logoProgress = clamp01((progress - 0.7) / 0.3);
-
-    flight.style.transform =
-      `translate(-50%, -50%) translate3d(${flightDx * progress}px, ${flightDy * progress}px, 0) scale(${scale})`;
-    flight.style.opacity = String(flightOpacity);
-
-    headerBrand.style.opacity = String(logoProgress);
-    headerBrand.style.transform = `translateX(${(-10 * (1 - logoProgress)).toFixed(2)}px)`;
-  }
-
-  function requestFlightFallback() {
-    if (flightTicking) return;
-    flightTicking = true;
-    requestAnimationFrame(updateFlightFallback);
-  }
-
-  function bindScrollFallback() {
-    if (scrollFallbackBound) return;
-    scrollFallbackBound = true;
-    window.addEventListener('scroll', requestFlightFallback, { passive: true });
-  }
-
-  createFlightMark();
-
-  let resizeTicking = false;
-  window.addEventListener('resize', () => {
-    if (resizeTicking) return;
-    resizeTicking = true;
-    requestAnimationFrame(() => {
-      resizeTicking = false;
-      measureFlight();
-      if (!scrollTimelineSupported) updateFlightFallback();
-    });
-  }, { passive: true });
 
   /* ---------- Mobile nav ---------- */
   const menuToggle = $('#menuToggle');
@@ -157,14 +50,17 @@
     });
 
     $$('a', mobileNav).forEach(link => link.addEventListener('click', closeMenu));
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 900) closeMenu();
-    }, { passive: true });
+    window.addEventListener('resize', () => { if (window.innerWidth >= 900) closeMenu(); }, { passive: true });
   }
 
-  /* ---------- One calm reveal pattern ---------- */
-  const revealEls = $$('.reveal');
+  /* ---------- Reveal + stagger ---------- */
+  $$('.reveal-grid').forEach(grid => {
+    $$('.reveal', grid).forEach((el, index) => {
+      el.style.transitionDelay = `${Math.min(index, 6) * 60}ms`;
+    });
+  });
 
+  const revealEls = $$('.reveal');
   if (reduceMotion || !('IntersectionObserver' in window)) {
     revealEls.forEach(el => el.classList.add('is-visible'));
   } else {
@@ -174,10 +70,28 @@
         entry.target.classList.add('is-visible');
         revealObserver.unobserve(entry.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -3% 0px' });
-
+    }, { threshold: 0.13, rootMargin: '0px 0px -4% 0px' });
     revealEls.forEach(el => revealObserver.observe(el));
+    // Ukrywamy elementy dopiero po poprawnym uruchomieniu obserwatora.
+    // Gdy JS nie załaduje się lub wcześniej zgłosi błąd, treść pozostaje widoczna.
     html.classList.add('reveal-ready');
+
+    // Bezpieczny fallback dla agresywnego przewijania / nietypowych WebView:
+    // IntersectionObserver pozostaje mechanizmem głównym, a scroll tylko dopina elementy,
+    // które znalazły się już w oknie, ale obserwator nie zdążył ich zgłosić.
+    const revealInViewport = () => {
+      revealEls.forEach(el => {
+        if (el.classList.contains('is-visible')) return;
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * .96 && rect.bottom > 0) {
+          el.classList.add('is-visible');
+          revealObserver.unobserve(el);
+        }
+      });
+    };
+    window.addEventListener('scroll', revealInViewport, { passive: true });
+    window.addEventListener('resize', revealInViewport, { passive: true });
+    requestAnimationFrame(revealInViewport);
   }
 
   /* ---------- Helpers ---------- */
@@ -266,12 +180,7 @@
 
   function goToForm(product) {
     if (product && productSelect) productSelect.value = product;
-    if (contactSection) {
-      contactSection.scrollIntoView({
-        behavior: reduceMotion ? 'auto' : 'smooth',
-        block: 'start'
-      });
-    }
+    if (contactSection) contactSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     window.setTimeout(() => nameField?.focus({ preventScroll: true }), reduceMotion ? 0 : 500);
   }
 
@@ -287,7 +196,7 @@
     });
   }
 
-  /* ---------- Count-up: values unchanged ---------- */
+  /* ---------- Count-up ---------- */
   const statsGrid = $('#statsGrid');
   let statsAnimated = false;
 
@@ -308,16 +217,13 @@
     const frame = now => {
       const t = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - t, 3);
-
       els.forEach(el => {
         const target = Number(el.dataset.count) || 0;
         const value = Math.round(target * eased);
         el.textContent = `${formatInt.format(value)}${el.dataset.suffix || ''}`;
       });
-
       if (t < 1) requestAnimationFrame(frame);
     };
-
     requestAnimationFrame(frame);
   }
 
@@ -326,12 +232,22 @@
       showFinalStats();
     } else {
       const statsObserver = new IntersectionObserver(entries => {
-        if (!entries.some(entry => entry.isIntersecting)) return;
-        animateStats();
-        statsObserver.disconnect();
+        if (entries.some(entry => entry.isIntersecting)) {
+          animateStats();
+          statsObserver.disconnect();
+        }
       }, { threshold: 0.35 });
-
       statsObserver.observe(statsGrid);
+      const statsFallback = () => {
+        if (statsAnimated) return;
+        const rect = statsGrid.getBoundingClientRect();
+        if (rect.top < window.innerHeight * .9 && rect.bottom > 0) {
+          animateStats();
+          statsObserver.disconnect();
+        }
+      };
+      window.addEventListener('scroll', statsFallback, { passive: true });
+      requestAnimationFrame(statsFallback);
     }
   }
 
@@ -369,18 +285,12 @@
   function formatPhone(value) {
     const digits = phoneDigits(value);
     if (!digits) return '';
-    const groups = [
-      digits.slice(0, 3),
-      digits.slice(3, 6),
-      digits.slice(6, 9)
-    ].filter(Boolean);
+    const groups = [digits.slice(0, 3), digits.slice(3, 6), digits.slice(6, 9)].filter(Boolean);
     return `+48 ${groups.join(' ')}`;
   }
 
   if (phoneField) {
-    phoneField.addEventListener('input', () => {
-      phoneField.value = formatPhone(phoneField.value);
-    });
+    phoneField.addEventListener('input', () => { phoneField.value = formatPhone(phoneField.value); });
   }
 
   function setFieldValidity(input, valid) {
@@ -401,7 +311,6 @@
     setFieldValidity(nameField, nameOk);
     setFieldValidity(phoneField, phoneOk);
     setFieldValidity(emailField, emailOk);
-
     const consentWrap = consentField?.closest('.consent-wrap');
     consentWrap?.classList.toggle('is-invalid', !consentOk);
     consentField?.setAttribute('aria-invalid', String(!consentOk));
@@ -414,7 +323,6 @@
       if (input.getAttribute('aria-invalid') === 'true') validateForm();
     });
   });
-
   consentField?.addEventListener('change', () => {
     consentField.closest('.consent-wrap')?.classList.remove('is-invalid');
     consentField.setAttribute('aria-invalid', 'false');
@@ -423,7 +331,6 @@
   if (form) {
     form.addEventListener('submit', async event => {
       event.preventDefault();
-
       if (!validateForm()) {
         const invalid = $('[aria-invalid="true"]', form);
         invalid?.focus();
@@ -432,11 +339,7 @@
 
       const submit = $('button[type="submit"]', form);
       const originalText = submit?.textContent;
-
-      if (submit) {
-        submit.disabled = true;
-        submit.textContent = 'Wysyłanie…';
-      }
+      if (submit) { submit.disabled = true; submit.textContent = 'Wysyłanie…'; }
 
       const endpoint = (form.dataset.endpoint || form.getAttribute('action') || '').trim();
       let sent = true;
@@ -456,10 +359,7 @@
         await new Promise(resolve => window.setTimeout(resolve, 280));
       }
 
-      if (submit) {
-        submit.disabled = false;
-        submit.textContent = originalText;
-      }
+      if (submit) { submit.disabled = false; submit.textContent = originalText; }
 
       if (!sent) {
         window.alert('Nie udało się wysłać zgłoszenia. Spróbuj ponownie lub skontaktuj się telefonicznie.');
