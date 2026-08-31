@@ -146,6 +146,15 @@
     requestAnimationFrame(renderIntro);
   }
 
+  // Po odświeżeniu strony przeglądarka sama przywraca poprzednią pozycję
+  // przewijania. Przy warunku `window.scrollY > 0` intro było wtedy pomijane —
+  // działało raz, a po każdym F5 wyglądało na zepsute. Przy wejściu bez kotwicy
+  // wyłączamy przywracanie i wracamy na górę, żeby odtworzyć je normalnie.
+  if ('scrollRestoration' in history) {
+    try { history.scrollRestoration = 'manual'; } catch (e) {}
+  }
+  if (!location.hash && window.scrollY > 0) window.scrollTo(0, 0);
+
   let seenIntro = false;
   try { seenIntro = sessionStorage.getItem('ptm-intro-seen') === '1'; } catch (e) {}
   const shouldSkipIntro = reduceMotion || (!forceIntro && (seenIntro || Boolean(location.hash) || window.scrollY > 0));

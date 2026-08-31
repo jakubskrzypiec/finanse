@@ -1,17 +1,17 @@
 /* ===== Kalkulator refinansowania — style ===== */
 
 :root{
-  --bg:#f4f6fb;
+  --bg:#F6F7F9;
   --bg-glow-1:rgba(79,70,229,.14);
   --bg-glow-2:rgba(16,185,129,.12);
   --surface:#ffffff;
   --surface-2:#f8fafc;
-  --line:#e6e9f2;
-  --line-strong:#d3d9e8;
-  --ink:#0d1424;
+  --line:#E4E7EC;
+  --line-strong:#C9CED7;
+  --ink:#0A0A0B;
   --ink-2:#4a5468;
   --ink-3:#7a849a;
-  --brand:#4f46e5;
+  --brand:#1A44FF;
   --brand-ink:#ffffff;
   --a:#f2683c;          /* obecny kredyt */
   --a-soft:rgba(242,104,60,.12);
@@ -31,10 +31,10 @@
   --surface-2:#0d1320;
   --line:#212a3d;
   --line-strong:#2c3853;
-  --ink:#eef2fb;
+  --ink:#F6F7F9;
   --ink-2:#a8b3c9;
   --ink-3:#7b869e;
-  --brand:#7c74ff;
+  --brand:#6E89FF;
   --brand-ink:#0a0d17;
   --a:#ff8a5c;
   --a-soft:rgba(255,138,92,.14);
@@ -61,7 +61,7 @@ body::before{
     radial-gradient(900px 520px at 12% -8%, var(--bg-glow-1), transparent 62%),
     radial-gradient(760px 480px at 92% 4%, var(--bg-glow-2), transparent 60%);
 }
-h1,h2,h3{margin:0;font-family:Archivo,Inter,sans-serif;font-variation-settings:"wdth" 112;letter-spacing:.005em;line-height:1.2;font-weight:500}
+h1,h2,h3{margin:0;font-family:"Instrument Sans",Inter,ui-sans-serif,system-ui,sans-serif;font-variation-settings:"wdth" 112;letter-spacing:.005em;line-height:1.2;font-weight:500}
 p{margin:0}
 
 .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
