@@ -14,22 +14,8 @@
   <meta property="og:url" content="https://ptmoney.pl/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;family=Source+Serif+4:opsz,wght@8..60,600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script>
-    document.documentElement.classList.add('js');
-    try {
-      if (!sessionStorage.getItem('ptm-intro-seen') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('intro-pending');
-      }
-    } catch (e) {}
-    // Twardy fail-safe: nawet gdy główny JS się nie załaduje, intro nie może zasłonić strony.
-    window.setTimeout(function () {
-      document.documentElement.classList.remove('intro-pending', 'intro-running', 'intro-leaving');
-      var intro = document.getElementById('siteIntro');
-      if (intro) intro.remove();
-    }, 1500);
-  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -44,13 +30,6 @@
   </script>
 </head>
 <body>
-  <div class="site-intro" id="siteIntro" aria-hidden="true">
-    <div class="intro-mark" aria-hidden="true">
-      <img class="intro-layer intro-layer--blue" src="logo-mark-blue.png" alt="">
-      <img class="intro-layer intro-layer--black" src="logo-mark-black.png" alt="">
-    </div>
-  </div>
-
   <a class="skip-link" href="#main">Przejdź do treści</a>
 
   <header class="site-header" id="top">
