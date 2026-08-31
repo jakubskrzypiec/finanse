@@ -283,7 +283,12 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
 /* Process */
 .process-grid { display: grid; border-top: 1px solid var(--line); }
 .process-step { position: relative; padding: 26px 0; border-bottom: 1px solid var(--line); }
-.step-number { display: block; margin-bottom: 22px; color: var(--blue); font-size: .76rem; font-weight: 800; letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+/* Numer kroku jako spokojne oznaczenie z kreską, a nie ozdobna cyfra.
+   Dmuchane cyfry z obrysem to element, który zdradza szablon. */
+.step-number { display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  color: var(--text-muted); font-size: .72rem; font-weight: 600; letter-spacing: .14em;
+  font-variant-numeric: tabular-nums; }
+.step-number::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .process-step h3 { margin-bottom: 10px; }
 .process-step p { margin: 0; color: var(--text-muted); font-size: .9rem; }
 
@@ -465,7 +470,7 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border-radius
   --shadow-hover: 0 1px 2px rgba(10,10,11,.06), 0 16px 36px rgba(10,10,11,.08);
 }
 body { font-family: var(--body-font); }
-h1,h2,h3,.intro-name { font-family: var(--heading-font); letter-spacing: -.03em; }
+h1,h2,h3,.intro-headline { font-family: var(--heading-font); letter-spacing: -.03em; }
 h1 { line-height: 1.02; font-weight: 700; }
 h2 { line-height: 1.06; font-weight: 700; }
 h3 { line-height: 1.12; font-weight: 650; }
@@ -521,7 +526,7 @@ p { max-width: 68ch; }
 
 .process-grid { border-top-color: var(--line); }
 .process-step { min-height: 215px; }
-.step-number { color: var(--blue); }
+.step-number { color: var(--text-muted); }
 .stats-band { background: #0A0A0B; color: #E8EAED; padding: 86px 0; }
 .stats-copy h2 { color: #E8EAED; }
 .stats-date { margin: 16px 0 0; color: #737B88; font-size: .7rem; letter-spacing: .04em; }
@@ -583,12 +588,17 @@ p { max-width: 68ch; }
 .js-intro .intro-spacer { display: block; height: 100vh; }
 .intro-center { display: grid; justify-items: center; gap: 22px; }
 .intro-monogram { width: 180px; height: auto; object-fit: contain; transform-origin: 50% 50%; will-change: transform; }
-.intro-copy { text-align: center; will-change: transform, opacity, filter; }
-.intro-name { margin: 0 0 6px; font: 700 clamp(1.9rem,4vw,2.55rem)/1 var(--heading-font); letter-spacing: -.03em; color: var(--ink); }
+.intro-copy { width: 100%; text-align: center; will-change: transform, opacity, filter; }
+/* Ekran wejścia ma udawać gotowy ekran główny, a nie planszę ładowania:
+   ta sama zapowiedź co w hero, ta sama typografia, żadnego napisu „Przewiń".
+   Dopiero przewinięcie ujawnia, że pod spodem jest cała strona. */
+.intro-headline { margin: 0 auto 16px; max-width: 26ch; font: 700 clamp(1.9rem,4vw,3.1rem)/1.1 var(--heading-font); letter-spacing: -.035em; color: var(--ink); text-wrap: balance; }
+.intro-headline span { display: inline-block; margin-top: .18em; color: var(--text-muted); font-weight: 600; font-size: .82em; }
 .intro-subtitle { margin: 0; color: #697180; font-size: .86rem; letter-spacing: .035em; }
-.intro-scroll { position: absolute; left: 50%; bottom: 34px; display: grid; justify-items: center; gap: 7px; transform: translateX(-50%); color: #8A929F; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; will-change: transform, opacity, filter; }
-.intro-scroll svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.intro-scroll::after { content:""; width:4px; height:4px; border-radius:50%; background:currentColor; animation:introPulse 1.6s var(--ease) infinite; }
+/* Zamiast etykiety „Przewiń" — cienka kreska, która ledwie sugeruje ruch. */
+.intro-scroll { position: absolute; left: 50%; bottom: 42px; display: grid; justify-items: center; transform: translateX(-50%); color: #C2C7D0; will-change: transform, opacity, filter; }
+.intro-scroll i { display: block; width: 1px; height: 46px; background: linear-gradient(180deg, transparent, currentColor); animation: introLine 2s var(--ease) infinite; }
+@keyframes introLine { 0%,100% { opacity: .35; transform: scaleY(.72); transform-origin: top; } 50% { opacity: 1; transform: scaleY(1); transform-origin: top; } }
 @keyframes introPulse { 50% { opacity:.35; transform:translateY(3px); } }
 .js-intro .hero-grid { opacity: 0; transform: translateY(28px) scale(1.02); transform-origin: 50% 0; will-change: transform, opacity; }
 .intro-docked #headerLogo { opacity: 1; }
@@ -631,6 +641,6 @@ p { max-width: 68ch; }
 @media (prefers-reduced-motion: reduce) {
   .js-intro .site-intro,.js-intro .intro-spacer { display:none !important; height:0 !important; }
   .js-intro .hero-grid { opacity:1 !important; transform:none !important; }
-  .intro-scroll::after { animation:none; }
+  .intro-scroll i { animation:none; }
 }
 .form-card .form-grid { display:block; }
