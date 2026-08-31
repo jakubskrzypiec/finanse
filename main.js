@@ -6,27 +6,133 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const formatInt = new Intl.NumberFormat('pl-PL', { maximumFractionDigits: 0 });
 
-  /* ---------- Intro: raz na sesję + twardy timeout ---------- */
+  /* ---------- Scroll-scrub intro ---------- */
   const html = document.documentElement;
   const intro = $('#siteIntro');
-  let introDone = false;
+  const introSpacer = $('#introSpacer');
+  const introMonogram = $('#introMonogram');
+  const introCopy = $('#introCopy');
+  const introScrollHint = $('#introScrollHint');
+  const headerLogo = $('#headerLogo');
+  const heroGrid = $('.hero-grid');
+  const header = $('.site-header');
+  const introFocusableRoots = [header, $('#main')].filter(Boolean);
+  let introActive = false;
+  let ticking = false;
+  let dock = { x: 0, y: 0 };
 
-  const finishIntro = () => {
-    if (introDone) return;
-    introDone = true;
-    html.classList.remove('intro-pending', 'intro-running', 'intro-leaving');
-    if (intro) intro.remove();
-    try { sessionStorage.setItem('ptm-intro-seen', '1'); } catch (e) {}
-  };
+  const clamp01 = value => Math.max(0, Math.min(1, value));
+  const phase = (p, from, to) => clamp01((p - from) / (to - from));
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
 
-  if (html.classList.contains('intro-pending') && intro && !reduceMotion) {
-    html.classList.add('intro-running');
-    window.setTimeout(() => html.classList.add('intro-leaving'), 920);
-    window.setTimeout(finishIntro, 1180);
-    window.setTimeout(finishIntro, 1500);
-  } else {
-    finishIntro();
+  function setPageInert(inert) {
+    introFocusableRoots.forEach(root => {
+      if ('inert' in root) root.inert = inert;
+      else root.setAttribute('aria-hidden', inert ? 'true' : 'false');
+    });
   }
+
+  function measureDock() {
+    if (!introMonogram || !headerLogo) return;
+    const source = introMonogram.getBoundingClientRect();
+    const target = headerLogo.getBoundingClientRect();
+    const sourceCx = source.left + source.width / 2;
+    const sourceCy = source.top + source.height / 2;
+    const targetCx = target.left + target.width / 2;
+    const targetCy = target.top + target.height / 2;
+    dock.x = targetCx - sourceCx;
+    dock.y = targetCy - sourceCy;
+  }
+
+  function finishIntro({ remember = true } = {}) {
+    introActive = false;
+    html.classList.remove('js-intro', 'intro-ready');
+    setPageInert(false);
+    if (intro) {
+      intro.style.pointerEvents = 'none';
+      intro.style.display = 'none';
+    }
+    if (introSpacer) introSpacer.style.display = 'none';
+    if (heroGrid) {
+      heroGrid.style.opacity = '1';
+      heroGrid.style.transform = 'none';
+    }
+    if (remember) {
+      try { sessionStorage.setItem('ptm-intro-seen', '1'); } catch (e) {}
+    }
+  }
+
+  function renderIntro() {
+    ticking = false;
+    if (!introActive || !intro || !introSpacer || !introMonogram) return;
+
+    const zone = Math.max(1, introSpacer.offsetHeight);
+    const p = clamp01(window.scrollY / zone);
+    const textP = easeOut(phase(p, 0, .30));
+    const logoP = easeOut(phase(p, .25, .85));
+    const coverP = easeOut(phase(p, .55, 1));
+    const heroP = easeOut(phase(p, .55, 1));
+    const desktopScale = window.innerWidth < 900 ? 1.2 : 1.35;
+    const scaleUp = 1 + (desktopScale - 1) * phase(p, .25, .75);
+    const dockScale = headerLogo ? Math.max(.1, headerLogo.getBoundingClientRect().height / Math.max(1, introMonogram.getBoundingClientRect().height / scaleUp)) : 1;
+    const scale = p < .75 ? scaleUp : scaleUp + (dockScale - scaleUp) * easeOut(phase(p, .75, .85));
+
+    if (introCopy) {
+      introCopy.style.opacity = String(1 - textP);
+      introCopy.style.transform = `translateY(${24 * textP}px)`;
+      introCopy.style.filter = `blur(${4 * textP}px)`;
+    }
+    if (introScrollHint) {
+      introScrollHint.style.opacity = String(1 - textP);
+      introScrollHint.style.filter = `blur(${4 * textP}px)`;
+    }
+
+    introMonogram.style.transform = `translate3d(${dock.x * logoP}px, ${dock.y * logoP}px, 0) scale(${scale})`;
+    intro.style.opacity = String(1 - coverP);
+    intro.style.clipPath = `inset(0 0 ${100 * coverP}% 0)`;
+
+    if (heroGrid) {
+      heroGrid.style.opacity = String(heroP);
+      heroGrid.style.transform = `translateY(${28 * (1 - heroP)}px) scale(${1 + .02 * (1 - heroP)})`;
+    }
+
+    const docked = p >= .85;
+    intro.style.pointerEvents = docked ? 'none' : 'auto';
+    setPageInert(!docked);
+
+    if (p >= .999) finishIntro();
+  }
+
+  function requestIntroFrame() {
+    if (!introActive || ticking) return;
+    ticking = true;
+    requestAnimationFrame(renderIntro);
+  }
+
+  const shouldSkipIntro = reduceMotion || location.hash || window.scrollY > 0 || !html.classList.contains('js-intro');
+  if (shouldSkipIntro) {
+    finishIntro({ remember: false });
+  } else if (intro && introSpacer && introMonogram && headerLogo) {
+    introActive = true;
+    html.classList.add('intro-ready');
+    setPageInert(true);
+    requestAnimationFrame(() => {
+      measureDock();
+      renderIntro();
+    });
+    window.addEventListener('scroll', requestIntroFrame, { passive: true });
+    window.addEventListener('resize', () => {
+      if (!introActive) return;
+      requestAnimationFrame(() => { measureDock(); renderIntro(); });
+    }, { passive: true });
+  } else {
+    finishIntro({ remember: false });
+  }
+
+  /* ---------- Compact sticky header ---------- */
+  const updateHeader = () => header?.classList.toggle('is-compact', window.scrollY > 40);
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
 
   /* ---------- Mobile nav ---------- */
   const menuToggle = $('#menuToggle');
@@ -98,6 +204,31 @@
   const fmtPLN = n => `${formatInt.format(Math.round(Number(n) || 0))} zł`;
   const fmtNumber = n => formatInt.format(Math.round(Number(n) || 0));
 
+
+  const numberTweens = new WeakMap();
+  function animateNumber(el, target, render, duration = 250) {
+    if (!el) return;
+    const previous = numberTweens.get(el);
+    if (previous?.raf) cancelAnimationFrame(previous.raf);
+    const from = Number(previous?.value ?? target);
+    const state = { value: from, raf: 0 };
+    numberTweens.set(el, state);
+    if (reduceMotion || Math.abs(target - from) < .01) {
+      state.value = target;
+      render(target);
+      return;
+    }
+    const started = performance.now();
+    const frame = now => {
+      const t = Math.min(1, (now - started) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      state.value = from + (target - from) * eased;
+      render(state.value);
+      if (t < 1) state.raf = requestAnimationFrame(frame);
+    };
+    state.raf = requestAnimationFrame(frame);
+  }
+
   function annuityPayment(principal, annualRatePct, months) {
     const p = Number(principal) || 0;
     const n = Math.max(1, Number(months) || 1);
@@ -135,7 +266,7 @@
     const payment = annuityPayment(amount, HERO_RATE, months);
     heroAmountVal.textContent = fmtPLN(amount);
     heroPeriodVal.textContent = `${months} mies.`;
-    heroResult.innerHTML = `${fmtNumber(payment)} <small>zł / mies.</small>`;
+    animateNumber(heroResult, payment, value => { heroResult.innerHTML = `${fmtNumber(value)} <small>zł / mies.</small>`; });
   }
 
   [heroAmount, heroPeriod].forEach(el => el && el.addEventListener('input', updateHeroCalculator));
@@ -164,9 +295,9 @@
     calcAmountVal.textContent = fmtPLN(amount);
     calcPeriodVal.textContent = `${months} mies.`;
     calcRateVal.textContent = `${rate.toFixed(1).replace('.', ',')}%`;
-    calcResult.innerHTML = `${fmtNumber(payment)} <small>zł / mies.</small>`;
-    calcInterest.textContent = fmtPLN(interest);
-    calcTotal.textContent = fmtPLN(total);
+    animateNumber(calcResult, payment, value => { calcResult.innerHTML = `${fmtNumber(value)} <small>zł / mies.</small>`; });
+    animateNumber(calcInterest, interest, value => { calcInterest.textContent = fmtPLN(value); });
+    animateNumber(calcTotal, total, value => { calcTotal.textContent = fmtPLN(value); });
   }
 
   [calcAmount, calcPeriod, calcRate].forEach(el => el && el.addEventListener('input', updateMainCalculator));

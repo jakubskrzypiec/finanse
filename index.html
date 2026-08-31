@@ -14,21 +14,24 @@
   <meta property="og:url" content="https://ptmoney.pl/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script>
     document.documentElement.classList.add('js');
     try {
-      if (!sessionStorage.getItem('ptm-intro-seen') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('intro-pending');
-      }
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const seen = sessionStorage.getItem('ptm-intro-seen');
+      if (!reduce && !seen && !location.hash) document.documentElement.classList.add('js-intro');
     } catch (e) {}
-    // Twardy fail-safe: nawet gdy główny JS się nie załaduje, intro nie może zasłonić strony.
-    window.setTimeout(function () {
-      document.documentElement.classList.remove('intro-pending', 'intro-running', 'intro-leaving');
-      var intro = document.getElementById('siteIntro');
-      if (intro) intro.remove();
-    }, 1500);
+    window.addEventListener('load', function () {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          if (!document.documentElement.classList.contains('intro-ready')) {
+            document.documentElement.classList.remove('js-intro');
+          }
+        });
+      });
+    });
   </script>
   <script type="application/ld+json">
   {
@@ -45,18 +48,26 @@
 </head>
 <body>
   <div class="site-intro" id="siteIntro" aria-hidden="true">
-    <div class="intro-mark" aria-hidden="true">
-      <img class="intro-layer intro-layer--blue" src="logo-mark-blue.png" alt="">
-      <img class="intro-layer intro-layer--black" src="logo-mark-black.png" alt="">
+    <div class="intro-center">
+      <img class="intro-monogram" id="introMonogram" src="logo-mark.png" alt="">
+      <div class="intro-copy" id="introCopy">
+        <p class="intro-name">P&amp;T money</p>
+        <p class="intro-subtitle">Pośrednictwo finansowe · Cała Polska</p>
+      </div>
+    </div>
+    <div class="intro-scroll" id="introScrollHint">
+      <span>Przewiń</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13M7 13l5 5 5-5"></path></svg>
     </div>
   </div>
+  <div class="intro-spacer" id="introSpacer" aria-hidden="true"></div>
 
   <a class="skip-link" href="#main">Przejdź do treści</a>
 
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="P&amp;T Money — strona główna">
-        <img src="logo-horizontal.png" alt="P&amp;T Money" width="174" height="36">
+        <img id="headerLogo" src="logo-horizontal.png" alt="P&amp;T Money" width="174" height="36">
       </a>
 
       <nav class="desktop-nav" aria-label="Główna nawigacja">
@@ -96,7 +107,7 @@
           <h1 id="hero-title">Kredyt, leasing czy faktoring? <span>Sprawdzamy banki</span>, żebyś Ty nie musiał.</h1>
           <p class="hero-lead">Porównujemy oferty ponad 30 banków i instytucji finansowych, negocjujemy warunki i pilnujemy formalności. Ty zostawiasz dane raz — resztą zajmuje się nasz zespół.</p>
           <div class="hero-actions">
-            <a class="btn btn--primary" href="#kontakt">Zostaw kontakt →</a>
+            <a class="btn btn--primary" href="#kontakt">Zostaw kontakt — oddzwonimy w 24 h</a>
             <a class="btn btn--ghost" href="tel:+48000000000">Zadzwoń</a>
           </div>
           <p class="hero-note">
@@ -293,6 +304,7 @@
           <div class="stat reveal"><strong data-count="48" data-suffix="h">48h</strong><span>średni czas pierwszej oferty</span></div>
           <div class="stat reveal"><strong data-count="0" data-suffix=" zł">0 zł</strong><span>kosztu konsultacji</span></div>
         </div>
+        <p class="stats-date reveal">dane na [MM.RRRR]</p>
         <div class="section-cta section-cta--left reveal"><a class="btn btn--light" href="#kontakt">Zostaw kontakt →</a></div>
       </div>
     </section>
@@ -360,10 +372,10 @@
             </div>
 
             <button class="btn btn--primary btn--submit" type="submit">Wyślij zgłoszenie</button>
-            <p class="form-note">Bez spamu. Tylko telefon od doradcy.</p>
+            <p class="form-note">Po wysłaniu formularza skontaktuje się doradca P&amp;T Money. Dane wykorzystamy wyłącznie do obsługi tego zgłoszenia.</p>
             <div class="form-success" id="formSuccess" role="status" aria-live="polite" hidden>
               <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12 2.25 2.25L15.5 9.5"></path></svg>
-              <span>Dziękujemy! Zgłoszenie zostało przyjęte — doradca skontaktuje się wkrótce.</span>
+              <span>Zgłoszenie przyjęte. Doradca oddzwoni najpóźniej w następnym dniu roboczym.</span>
             </div>
           </form>
         </div>
@@ -414,6 +426,7 @@
         <div class="footer-col"><h2>Firma</h2><a href="#jak-to-dziala">Jak działamy</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a></div>
         <div class="footer-col"><h2>Kontakt</h2><a href="tel:+48000000000">+48 000 000 000</a><a href="mailto:kontakt@ptmoney.pl">kontakt@ptmoney.pl</a><a href="https://ptmoney.pl/">ptmoney.pl</a></div>
       </div>
+      <div class="footer-registry" aria-label="Dane rejestrowe"><span>NIP: [NIP]</span><span>Nr wpisu KNF: [Nr wpisu KNF]</span><span>Siedziba: [Adres]</span></div>
       <div class="footer-bottom">
         <p>© 2026 P&amp;T Money. Wszelkie prawa zastrzeżone.</p>
         <p><a href="polityka-prywatnosci.html">Polityka prywatności</a> · <a href="regulamin.html">Regulamin</a></p>
